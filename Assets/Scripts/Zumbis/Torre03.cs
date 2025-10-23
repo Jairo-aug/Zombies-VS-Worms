@@ -1,0 +1,227 @@
+using UnityEngine;
+using System;
+
+public class Torre03 : MonoBehaviour
+{
+    public int custo = 150;
+    public GameObject projectilePrefab; // Prefab do projétil
+    public float attackRange = 5f; // Alcance de ataque da torre
+    public float attackCooldown = 2f; // Tempo entre ataques
+    private float attackCooldownTimer;
+
+    [SerializeField] float currentHealth, maxHealth = 50f;
+    [SerializeField] HealthBar healthBar;
+
+    public float projectileLifetime = 3f; // Tempo de vida do projétil em segundos
+
+    [SerializeField] float timeUntilUpgrade, upgradeTime = 45f;
+    [SerializeField] ParticleSystem evolutionEffect;
+
+    private AudioSource somUpgrade;
+    [SerializeField] AudioSource somMorte;
+
+    private bool isUpgrade = false;
+
+    public static event Action<GameObject> OnTorreMorreu;
+
+    // Modificações Visuais
+
+    [SerializeField] private float fadeDuration = 0.5f; // Duração do fade-out
+    [SerializeField] private float damageFlashDuration = 0.1f; // Duração do flash de dano
+    [SerializeField] private Color damageFlashColor = Color.red; // Cor do flash de dano
+    private SpriteRenderer spriteRenderer;
+    private PilhaDeCarne pilhaDeCarne;
+
+
+    void Start()
+    {
+        somUpgrade = GetComponent<AudioSource>();
+        somMorte = GetComponent<AudioSource>();
+
+        healthBar = GetComponentInChildren<HealthBar>();
+        currentHealth = maxHealth;
+        healthBar.UpdateHealthBar(currentHealth, maxHealth);
+        timeUntilUpgrade = upgradeTime;
+
+        // Modificações Visuais
+
+        spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+
+        GameObject pilhaDeCarneObject = GameObject.FindGameObjectWithTag("PilhaDeCarne");
+
+        if (pilhaDeCarneObject != null)
+        {
+            pilhaDeCarne = pilhaDeCarneObject.GetComponent<PilhaDeCarne>();
+        }
+    }
+
+    void Update()
+    {
+        attackCooldownTimer -= Time.deltaTime;
+        timeUntilUpgrade -= Time.deltaTime;
+
+        Collider2D[] enemiesInRange = Physics2D.OverlapCircleAll(transform.position, attackRange);
+        GameObject closestEnemy = null;
+        float shortestDistance = Mathf.Infinity;
+
+        foreach (Collider2D collider in enemiesInRange)
+        {
+            if (collider.CompareTag("Enemy"))
+            {
+                float distanceToEnemy = Vector2.Distance(transform.position, collider.transform.position);
+                if (distanceToEnemy < shortestDistance)
+                {
+                    shortestDistance = distanceToEnemy;
+                    closestEnemy = collider.gameObject;
+                }
+            }
+        }
+
+        if (closestEnemy != null && attackCooldownTimer <= 0f)
+        {
+            Attack(closestEnemy);
+            attackCooldownTimer = attackCooldown;
+        }
+
+        if (timeUntilUpgrade <= 0f)
+        {
+            UpgradeStatus();
+        }
+    }
+
+    void Attack(GameObject target)
+    {
+        GameObject projectile = Instantiate(projectilePrefab, transform.position, Quaternion.identity);
+        
+        // Obtenha o script do projétil após a instância
+        Projetil projScript = projectile.GetComponent<Projetil>();
+        
+        if (projScript != null)
+        {
+            projScript.SetTarget(target);
+        }
+        else
+        {
+            Debug.LogError("Script 'Projetil' não encontrado no prefab do projétil.");
+        }
+
+        if(isUpgrade == true)
+        {
+            projScript.UpgradeStatus();       
+        }
+
+        // Ignorar a colisão entre o projétil e o inimigo para evitar interação física
+        Collider2D enemyCollider = target.GetComponent<Collider2D>();
+        Collider2D projectileCollider = projectile.GetComponent<Collider2D>();
+        
+        if (enemyCollider != null && projectileCollider != null)
+        {
+            Physics2D.IgnoreCollision(projectileCollider, enemyCollider);
+        }
+
+        Destroy(projectile, projectileLifetime);
+    }
+
+
+    public void TakeDamage(float damage)
+    {
+        currentHealth -= damage;
+        healthBar.UpdateHealthBar(currentHealth, maxHealth);
+
+        // Modificações Visuais
+
+        StartCoroutine(DamageFlashEffect());
+
+        if (currentHealth <= 0)
+        {
+            Die();
+        }
+    }
+
+    void Die()
+    {
+        somMorte.Play();
+        StartCoroutine(SumirEDestruir());
+    }
+
+    void OnMouseOver()
+    {
+        if (Input.GetMouseButtonDown(1)) // Botão direito do mouse
+        {
+            DestruirZumbi();
+        }
+    }
+
+    // Função para quando você clica com o botão direito no zumbi
+
+    void DestruirZumbi()
+    {
+        // Calcula a metade do custo
+        int pontosRecuperados = Mathf.FloorToInt(custo / 2.0f);
+
+        // Recupera os pontos na Pilha de Carne
+        if (pilhaDeCarne != null)
+        {
+            pilhaDeCarne.GerarPontos(pontosRecuperados);
+        }
+        else
+        {
+            Debug.LogWarning("PilhaDeCarne não foi atribuída. Pontos não foram recuperados.");
+        }
+
+        // Inicia o fade-out antes de destruir o objeto
+        StartCoroutine(SumirEDestruir());
+    }
+
+    // Modificações Visuais
+
+    System.Collections.IEnumerator SumirEDestruir()
+    {
+        if (spriteRenderer != null)
+        {
+            Color originalColor = spriteRenderer.color;
+            float elapsedTime = 0f;
+
+            while (elapsedTime < fadeDuration)
+            {
+                elapsedTime += Time.deltaTime;
+                float alpha = Mathf.Lerp(1f, 0f, elapsedTime / fadeDuration);
+                spriteRenderer.color = new Color(originalColor.r, originalColor.g, originalColor.b, alpha);
+                yield return null;
+            }
+        }
+
+        // Destroi o objeto após o fade-out
+        OnTorreMorreu?.Invoke(gameObject);
+        Destroy(gameObject);
+    }
+
+    private System.Collections.IEnumerator DamageFlashEffect()
+    {
+        if (spriteRenderer != null)
+        {
+            // Armazena a cor original do zumbi
+            Color originalColor = spriteRenderer.color;
+
+            // Muda a cor para o flash de dano
+            spriteRenderer.color = damageFlashColor;
+
+            // Espera o tempo do flash de dano
+            yield return new WaitForSeconds(damageFlashDuration);
+
+            // Restaura a cor original
+            spriteRenderer.color = originalColor;
+        }
+    }
+
+    void UpgradeStatus()
+    {
+        evolutionEffect.Play();
+        somUpgrade.Play();
+        maxHealth += 20f;
+        currentHealth = maxHealth;
+        healthBar.UpdateHealthBar(currentHealth, maxHealth);
+        timeUntilUpgrade = upgradeTime;
+        isUpgrade = true;
+    }
+}
