@@ -4,6 +4,9 @@ using UnityEngine.SceneManagement;
 using Unity.VisualScripting;
 using System.Collections;
 
+// Relativamente independente.
+// Única dependência é a classe HealthBar;
+// REFATORÁVEL.
 public class PilhaDeCarne : MonoBehaviour
 {
     public int pontosPodres = 0; // Pontos disponíveis, inicializando com 0

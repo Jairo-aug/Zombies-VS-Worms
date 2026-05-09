@@ -14,7 +14,7 @@ public class Minhoca : MonoBehaviour
 
     [SerializeField] protected float danoAtaque = 10f; // Dano ao atacar
     protected virtual int expAmount { get; set; } = 15; // Experiência gerada ao morrer
-    [SerializeField] protected virtual float intervaloDano { get; set; } = 2f; // Intervalo entre ataques
+    protected virtual float intervaloDano { get; set; } = 2f; // Intervalo entre ataques
     protected PilhaDeCarne pilhaDeCarne; // Referência à pilha de carne
     private bool isTouchingPilhaDeCarne = false; // Controle de colisão com a pilha de carne
     private Collider2D isTouchingTorre; // Controle de colisão com a torre
