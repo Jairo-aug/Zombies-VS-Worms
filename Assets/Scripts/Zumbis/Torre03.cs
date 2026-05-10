@@ -10,7 +10,7 @@ public class Torre03 : MonoBehaviour
     private float attackCooldownTimer;
 
     [SerializeField] float currentHealth, maxHealth = 50f;
-    [SerializeField] HealthBar healthBar;
+    [SerializeField] SliderBar healthBar;
 
     public float projectileLifetime = 3f; // Tempo de vida do projétil em segundos
 
@@ -38,9 +38,9 @@ public class Torre03 : MonoBehaviour
         somUpgrade = GetComponent<AudioSource>();
         somMorte = GetComponent<AudioSource>();
 
-        healthBar = GetComponentInChildren<HealthBar>();
+        healthBar = GetComponentInChildren<SliderBar>();
         currentHealth = maxHealth;
-        healthBar.UpdateHealthBar(currentHealth, maxHealth);
+        healthBar.Set(maxHealth, currentHealth);
         timeUntilUpgrade = upgradeTime;
 
         // Modificações Visuais
@@ -126,7 +126,7 @@ public class Torre03 : MonoBehaviour
     public void TakeDamage(float damage)
     {
         currentHealth -= damage;
-        healthBar.UpdateHealthBar(currentHealth, maxHealth);
+        healthBar.UpdateSlider(currentHealth);
 
         // Modificações Visuais
 
@@ -220,7 +220,7 @@ public class Torre03 : MonoBehaviour
         somUpgrade.Play();
         maxHealth += 20f;
         currentHealth = maxHealth;
-        healthBar.UpdateHealthBar(currentHealth, maxHealth);
+        healthBar.UpdateSlider(currentHealth);
         timeUntilUpgrade = upgradeTime;
         isUpgrade = true;
     }

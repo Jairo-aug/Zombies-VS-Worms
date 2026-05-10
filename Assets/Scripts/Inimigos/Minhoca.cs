@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// REFATORAÇÃO TOTAL
 public class Minhoca : MonoBehaviour
 {
     protected Transform target; // Alvo atual
@@ -13,8 +14,8 @@ public class Minhoca : MonoBehaviour
     [SerializeField] protected EnemyHealthBar healthBar; // Barra de vida
 
     [SerializeField] protected float danoAtaque = 10f; // Dano ao atacar
-    protected virtual int expAmount { get; set; } = 15; // Experiência gerada ao morrer
-    protected virtual float intervaloDano { get; set; } = 2f; // Intervalo entre ataques
+    protected int expAmount = 15; // Experiência gerada ao morrer
+    protected float intervaloDano = 2f; // Intervalo entre ataques
     protected PilhaDeCarne pilhaDeCarne; // Referência à pilha de carne
     private bool isTouchingPilhaDeCarne = false; // Controle de colisão com a pilha de carne
     private Collider2D isTouchingTorre; // Controle de colisão com a torre

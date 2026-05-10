@@ -1,7 +1,6 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
-using Unity.VisualScripting;
 using System.Collections;
 
 // Relativamente independente.
@@ -15,21 +14,19 @@ public class PilhaDeCarne : MonoBehaviour
 
     [SerializeField] float maxHealth = 80f;
     private float health;
-    [SerializeField] HealthBar playerHealthBar;
+    [SerializeField] SliderBar playerHealthBar;
 
     private float tempoUpdate;
     private SpriteRenderer spriteRenderer; // Referência ao SpriteRenderer para a cor
     [SerializeField] private Color damageColor = Color.red; // Cor para o efeito de dano
     private Color originalColor; // Cor original
 
-    private void Start()
-    {
+    private void Start() {
         // Inicia a geração automática de pontos a cada segundo
         health = maxHealth;
         pontosPodres = 300;
         AtualizarUI(); // Atualiza a UI quando o jogo começa
-        playerHealthBar = GetComponentInChildren<HealthBar>();
-        playerHealthBar.UpdateHealthBar(health, maxHealth); // Atualiza a UI de vida desde o início
+        playerHealthBar.Set(maxHealth, health); // Atualiza a UI de vida desde o início
         
         spriteRenderer = GetComponent<SpriteRenderer>(); // Pegando a referência ao SpriteRenderer
         originalColor = spriteRenderer.color; // Armazena a cor original do sprite
@@ -61,7 +58,7 @@ public class PilhaDeCarne : MonoBehaviour
     public void TakeDamage(float damageAmount)
     {
         health -= damageAmount;
-        playerHealthBar.UpdateHealthBar(health, maxHealth);
+        playerHealthBar.UpdateSlider(health);
         
         // Adiciona o efeito visual de dano
         StartCoroutine(DamageEffect());

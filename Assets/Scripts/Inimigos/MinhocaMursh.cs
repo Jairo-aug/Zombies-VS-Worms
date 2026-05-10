@@ -5,8 +5,8 @@ using UnityEngine;
 public class MinhocaMursh : Minhoca
 {
     // Ajuste do intervalo de dano e experiência
-    protected override float intervaloDano { get; set; } = 1.8f; // Novo valor para a subclasse
-    protected override int expAmount { get; set; } = 30;
+    protected float intervaloDano = 1.8f; // Novo valor para a subclasse
+    protected int expAmount = 30;
 
     // Aumentar vida e dano
     [SerializeField] private float bonusHealth = 10f; // Vida extra específica da MinhocaMursh
