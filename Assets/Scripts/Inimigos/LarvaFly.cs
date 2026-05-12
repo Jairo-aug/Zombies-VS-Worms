@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class LarvaFly : Larva
 {
-    protected override int expAmount { get; set; } = 50;
+    protected int expAmount = 50;
 
     public new void Start()
     {

@@ -6,7 +6,7 @@ public class ArmadilhaVermifugo : MonoBehaviour
 {
     [SerializeField] private float currentTime;
     [SerializeField] private float maxDuration = 1f;
-    [SerializeField] private HealthBar timeBar; // Referência à barra de vida
+    [SerializeField] private SliderBar timeBar; // Referência à barra de vida
 
     public static event Action<GameObject> OnTorreMorreu;
 
@@ -27,10 +27,11 @@ public class ArmadilhaVermifugo : MonoBehaviour
         GameObject pilhaDeCarneObject = GameObject.FindGameObjectWithTag("PilhaDeCarne");
         pilhaDeCarne = pilhaDeCarneObject?.GetComponent<PilhaDeCarne>();
 
-        timeBar = GetComponentInChildren<HealthBar>();
+        timeBar = GetComponentInChildren<SliderBar>();
         if (timeBar != null)
-        {
-            timeBar.UpdateHealthBar(currentTime, maxDuration);
+        {   
+            // Mudar para outro tipo de barra, ou juntar as duas.
+            timeBar.Set(maxDuration, currentTime);
         }
 
         // Inicializa o SpriteRenderer
@@ -46,7 +47,7 @@ public class ArmadilhaVermifugo : MonoBehaviour
         // Atualiza o tempo de vida da armadilha
         currentTime -= Time.deltaTime;
         if (timeBar != null)
-            timeBar.UpdateHealthBar(currentTime, maxDuration);
+            timeBar.UpdateSlider(currentTime);
 
         // Checa se o tempo acabou
         if (currentTime <= 0)

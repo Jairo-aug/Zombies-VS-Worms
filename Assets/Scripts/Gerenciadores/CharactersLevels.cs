@@ -8,7 +8,7 @@ public class CharactersLevels : MonoBehaviour
     [SerializeField] int currentStatus, currentLevel;
     [SerializeField] int maxStatus = 450;
 
-    [SerializeField] HealthBar expBar;
+    [SerializeField] SliderBar expBar;
     [SerializeField] TextMeshProUGUI diaTexto; // Usando TextMeshProUGUI para exibir o texto
 
     [SerializeField] GeradorInimigo listaInimigos;
@@ -18,8 +18,7 @@ public class CharactersLevels : MonoBehaviour
         currentStatus = 0;
         currentLevel = 1;
         ExperienceManager.Instance.OnExperienceChange += HandleExperienceChange;
-        expBar = GetComponentInChildren<HealthBar>();
-        expBar.UpdateHealthBar(currentStatus, maxStatus);
+        expBar.Set(maxStatus, 0);
         
         MostrarDiaAtual(); // Mostrar "DIA 01" no início do jogo
     }
@@ -32,9 +31,10 @@ public class CharactersLevels : MonoBehaviour
     private void HandleExperienceChange(int newStatus)
     {
         currentStatus += newStatus;
-        expBar.UpdateHealthBar(currentStatus, maxStatus);
+        expBar.UpdateSlider(currentStatus);
         if (currentStatus >= maxStatus)
         {
+            Debug.Log("Loop infinito");
             LevelUp();
         }
     }
@@ -44,7 +44,7 @@ public class CharactersLevels : MonoBehaviour
         currentLevel++;
         currentStatus = 0; // Reinicia o status atual
         maxStatus += 300; // Aumenta o limite para o próximo nível
-        expBar.UpdateHealthBar(currentStatus, maxStatus); // Reinicia a barra de progresso
+        expBar.Set(maxStatus, 0); // Reinicia a barra de progresso
 
         // Atualiza o estado para o próximo dia
         if (currentLevel <= 3)

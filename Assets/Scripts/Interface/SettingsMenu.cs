@@ -35,22 +35,24 @@ public class SettingsMenu : MonoBehaviour
         resolutionDropdown.value = currentResolutionIndex;
         resolutionDropdown.RefreshShownValue();
 
+        audioMixer.SetFloat("GeneralVolume", audioMixer.GetFloat("GeneralVolume"));
+        audioMixer.SetFloat("MusicVolume", audioMixer.GetFloat("MusicVolume"));
+        audioMixer.SetFloat("EffectsVolume", audioMixer.GetFloat("EffectsVolume"));
     }
 
 
-    public void SetGeneralVolume (float volume)
-    {
-        audioMixer.SetFloat("GeneralVolume", volume);
+    public void SetGeneralVolume (float volume) {
+        audioMixer.SetFloat("GeneralVolume", ConvertToDecibels(volume));
     }
 
-    public void SetMusicVolume (float volume)
-    {
-        audioMixer.SetFloat("MusicVolume", volume);
+    public void SetMusicVolume (float volume) {
+        audioMixer.SetFloat("MusicVolume", ConvertToDecibels(volume));
     }
-    public void SetEffectsVolume (float volume)
-    {
-        audioMixer.SetFloat("EffectsVolume", volume);
+    public void SetEffectsVolume (float volume) {
+        audioMixer.SetFloat("EffectsVolume", ConvertToDecibels(volume));
     }
+
+    private float ConvertToDecibels(float sliderValue) => Mathf.Log10(sliderValue) * 20 + 10f;
 
     public void SetFullscreen (bool isFullscreen)
     {

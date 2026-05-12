@@ -21,7 +21,7 @@ public class Larva : MonoBehaviour
     protected Collider2D isTouchingTorre; // Verifica se está tocando a Pilha de Carne
     protected float tempoDesdeUltimoDano; // Tempo desde a última aplicação de dano
 
-    protected virtual int expAmount {get; set;}= 30;
+    protected int expAmount = 30;
 
     // Modificações Visuais
 
