@@ -9,10 +9,10 @@ public class Enemy : MonoBehaviour {
 
     // ATRIBUTOS
     // Pode ser substituido por um scriptable object.
-    protected virtual float maxSpeed { get; set; } = 1f;
-    protected virtual float maxHealth { get; set; } = 85f;
-    protected virtual float danoAtaque { get; set; } = 10f;
-    protected virtual float intervaloDano { get; set; } = 2f;
+    protected virtual float maximumSpeed { get; set; } = 1f;
+    protected virtual float maximumHealth { get; set; } = 85f;
+    protected virtual float attackDamage { get; set; } = 10f;
+    protected virtual float attackInterval { get; set; } = 2f;
     protected virtual int expAmount { get; set; } = 30;
 
 
@@ -20,10 +20,10 @@ public class Enemy : MonoBehaviour {
     protected EnemyHealthBar healthBar;
 
     
-    protected PilhaDeCarne pilhaDeCarne; // Referência à Pilha de Carne
-    protected bool isTouchingPilhaDeCarne = false; // Verifica se está tocando a Pilha de Carne
-    protected Collider2D isTouchingTorre; // Verifica se está tocando a Pilha de Carne
-    protected float tempoDesdeUltimoDano; // Tempo desde a última aplicação de dano
+    protected PilhaDeCarne pileOfFlesh; // Referência à Pilha de Carne
+    protected bool isTouchingPileOfFlesh = false; // Verifica se está tocando a Pilha de Carne
+    protected Collider2D isTouchingTower; // Verifica se está tocando a Pilha de Carne
+    protected float timeSinceLastHit; // Tempo desde a última aplicação de dano
 
     // Modificações Visuais
     private SpriteRenderer spriteRenderer; // Referência ao SpriteRenderer
@@ -43,15 +43,15 @@ public class Enemy : MonoBehaviour {
     protected virtual void Start() {
         // Encontra o objeto chamado "Pilha de Carne" na cena e define o alvo
         
-        TargetIsPilhaDeCarne();
+        TargetIspileOfFlesh();
     
-        currentHealth = maxHealth;
+        currentHealth = maximumHealth;
         
         if (healthBar != null) {
-            healthBar.UpdateHealthBar(currentHealth, maxHealth);
+            healthBar.UpdateHealthBar(currentHealth, maximumHealth);
         }
 
-        currentSpeed = maxSpeed;
+        currentSpeed = maximumSpeed;
 
         // Modificações Visuais
         if (spriteRenderer != null) {
@@ -60,7 +60,7 @@ public class Enemy : MonoBehaviour {
     }
 
     protected virtual void Update() {
-        tempoDesdeUltimoDano += Time.deltaTime; // Atualiza o tempo desde o último dano
+        timeSinceLastHit += Time.deltaTime; // Atualiza o tempo desde o último dano
 
         // Verifica se o alvo foi definido
         if (target != null) {
@@ -72,18 +72,20 @@ public class Enemy : MonoBehaviour {
         }
 
         // Aplica dano contínuo enquanto estiver tocando a Pilha de Carne
-        if (isTouchingPilhaDeCarne && pilhaDeCarne != null) {
+        if (isTouchingPileOfFlesh && pileOfFlesh != null) {
             
-            if (tempoDesdeUltimoDano >= intervaloDano) {
-                pilhaDeCarne.TakeDamage(danoAtaque); // Aplica dano à vida da Pilha de Carne
-                tempoDesdeUltimoDano = 0f; // Reseta o tempo
+            if (timeSinceLastHit >= attackInterval) {
+                // Usar evento para dar dano à pilha.
+                pileOfFlesh.TakeDamage(attackDamage); // Aplica dano à vida da Pilha de Carne
+
+                timeSinceLastHit = 0f; // Reseta o tempo
             }
         }
 
-        else if (isTouchingTorre != null) {
-            if (tempoDesdeUltimoDano >= intervaloDano) {
-                Attack(isTouchingTorre.gameObject);
-                tempoDesdeUltimoDano = 0f; // Reseta o tempo
+        else if (isTouchingTower != null) {
+            if (timeSinceLastHit >= attackInterval) {
+                Attack(isTouchingTower.gameObject);
+                timeSinceLastHit = 0f; // Reseta o tempo
             }
         }
 
@@ -92,13 +94,13 @@ public class Enemy : MonoBehaviour {
     protected virtual void OnTriggerEnter2D(Collider2D collider) {
         
         if (collider.CompareTag("PilhaDeCarne")) {
-            isTouchingPilhaDeCarne = true; 
+            isTouchingPileOfFlesh = true; 
             currentSpeed = 0;    
             enemyRb.isKinematic = true;
         }
 
         else if (collider.CompareTag("Player")) {
-            isTouchingTorre = collider;
+            isTouchingTower = collider;
             currentSpeed = 0;    
             enemyRb.isKinematic = true;
         }
@@ -106,13 +108,13 @@ public class Enemy : MonoBehaviour {
 
     protected virtual void OnTriggerExit2D(Collider2D collider) {
         if (collider.CompareTag("PilhaDeCarne")) {
-            isTouchingPilhaDeCarne = false; // Marca que não está mais tocando a Pilha de Carne
+            isTouchingPileOfFlesh = false; // Marca que não está mais tocando a Pilha de Carne
         }
 
         else if (collider.CompareTag("Player")) {
-            isTouchingTorre = null;
-            TargetIsPilhaDeCarne();
-            currentSpeed = maxSpeed;    
+            isTouchingTower = null;
+            TargetIspileOfFlesh();
+            currentSpeed = maximumSpeed;    
             enemyRb.isKinematic = false;
         }
     }
@@ -121,23 +123,23 @@ public class Enemy : MonoBehaviour {
         // Aplica dano diretamente ao inimigo mais próximo
 
         if(target.gameObject.TryGetComponent<Torre01>(out Torre01 torre01)) {
-            torre01.TakeDamage(danoAtaque);
+            torre01.TakeDamage(attackDamage);
         }
 
         else if(target.gameObject.TryGetComponent<Torre02>(out Torre02 torre02)) {
-            torre02.TakeDamage(danoAtaque);
+            torre02.TakeDamage(attackDamage);
         }
 
         else if(target.gameObject.TryGetComponent<Torre03>(out Torre03 torre03)) {
-            torre03.TakeDamage(danoAtaque);
+            torre03.TakeDamage(attackDamage);
         }
 
         else if(target.gameObject.TryGetComponent<Torre04>(out Torre04 torre04)) {
-            torre04.TakeDamage(danoAtaque);
+            torre04.TakeDamage(attackDamage);
         }
 
-        else if(target.gameObject.TryGetComponent<PilhaDeCarne>(out PilhaDeCarne pilhaDeCarne)) {
-            pilhaDeCarne.TakeDamage(danoAtaque);
+        else if(target.gameObject.TryGetComponent<PilhaDeCarne>(out PilhaDeCarne pileOfFlesh)) {
+            pileOfFlesh.TakeDamage(attackDamage);
         } 
     }
 
@@ -146,7 +148,7 @@ public class Enemy : MonoBehaviour {
 
         // Atualiza a barra de vida
         if (healthBar != null) {
-            healthBar.UpdateHealthBar(currentHealth, maxHealth);
+            healthBar.UpdateHealthBar(currentHealth, maximumHealth);
         }
 
         // Modificações Visuais
@@ -187,20 +189,20 @@ public class Enemy : MonoBehaviour {
     protected void Die() {
         // Gerar experiência e pontos
         ExperienceManager.Instance.AddExperience(expAmount);
-        pilhaDeCarne.GerarPontos(expAmount);
+        pileOfFlesh.GerarPontos(expAmount);
         StartCoroutine(SumirEDestruir());
     }
 
-    protected virtual void TargetIsPilhaDeCarne() {
-        GameObject pilhaDeCarneObject = GameObject.FindGameObjectWithTag("PilhaDeCarne");
-        if (pilhaDeCarneObject != null) {
-            target = pilhaDeCarneObject.transform;
-            pilhaDeCarne = pilhaDeCarneObject.GetComponent<PilhaDeCarne>(); // Obtém o script da Pilha de Carne
+    protected virtual void TargetIspileOfFlesh() {
+        GameObject pileOfFleshObject = GameObject.FindGameObjectWithTag("PilhaDeCarne");
+        if (pileOfFleshObject != null) {
+            target = pileOfFleshObject.transform;
+            pileOfFlesh = pileOfFleshObject.GetComponent<PilhaDeCarne>(); // Obtém o script da Pilha de Carne
         }
     }
 
     public void levelUp() {
-        maxHealth += 25f;
-        danoAtaque += 4f;
+        maximumHealth += 25f;
+        attackDamage += 4f;
     }
 }

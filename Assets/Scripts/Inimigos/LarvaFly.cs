@@ -8,7 +8,7 @@ public class LarvaFly : Larva {
     protected override int expAmount { get; set; } = 50;
 
     protected override void Update() {
-        tempoDesdeUltimoDano += Time.deltaTime;
+        timeSinceLastHit += Time.deltaTime;
 
         // Verifica se o alvo foi definido
         if (target != null) {
@@ -19,10 +19,11 @@ public class LarvaFly : Larva {
             transform.position = Vector2.MoveTowards(transform.position, target.position, currentSpeed * Time.deltaTime);
         }
 
-        if (isTouchingPilhaDeCarne && pilhaDeCarne != null) {
-            if (tempoDesdeUltimoDano >= intervaloDano) {
-                pilhaDeCarne.TakeDamage(danoAtaque); // Aplica dano à vida da Pilha de Carne
-                tempoDesdeUltimoDano = 0f; // Reseta o tempo
+        if (isTouchingPileOfFlesh && pileOfFlesh != null) {
+            if (timeSinceLastHit >= attackInterval) {
+                // Usar evento para dar dano à pilha.
+                pileOfFlesh.TakeDamage(attackDamage); // Aplica dano à vida da Pilha de Carne
+                timeSinceLastHit = 0f; // Reseta o tempo
             }
         }
     }
@@ -30,14 +31,14 @@ public class LarvaFly : Larva {
     protected override void OnTriggerEnter2D(Collider2D collider) {
         // Verifica se o objeto colidido é a Pilha de Carne
         if (collider.CompareTag("PilhaDeCarne")) {
-            isTouchingPilhaDeCarne = true; // Marca que está tocando a Pilha de Carne
+            isTouchingPileOfFlesh = true; // Marca que está tocando a Pilha de Carne
         }
     }
 
     protected override void OnTriggerExit2D(Collider2D collider) {
         // Verifica se o objeto que saiu do trigger é a Pilha de Carne
         if (collider.CompareTag("PilhaDeCarne")) {
-            isTouchingPilhaDeCarne = false; // Marca que não está mais tocando a Pilha de Carne
+            isTouchingPileOfFlesh = false; // Marca que não está mais tocando a Pilha de Carne
         }
     }
 }

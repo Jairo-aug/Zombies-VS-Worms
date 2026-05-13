@@ -7,7 +7,7 @@ using UnityEngine;
 
 public class VermeFlash : Verme {
     // Somado em 15f;
-    protected override float maxSpeed { get; set; } = 18.6f;
+    protected override float maximumSpeed { get; set; } = 18.6f;
     // Somado em 20;
     protected override int expAmount { get; set; } = 40;
 }
