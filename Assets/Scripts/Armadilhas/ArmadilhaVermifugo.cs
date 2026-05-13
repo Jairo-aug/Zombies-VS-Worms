@@ -118,7 +118,7 @@ public class ArmadilhaVermifugo : MonoBehaviour
 
     public void OnTriggerEnter2D(Collider2D collider)
     {
-        if (collider.gameObject.TryGetComponent<Verme>(out Verme verme))
+        if (collider.gameObject.TryGetComponent<Verm>(out Verm verme))
         {
             verme.TakeDamage(20);
         }

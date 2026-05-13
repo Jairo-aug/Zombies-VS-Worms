@@ -1,4 +1,4 @@
-public class Minhoca : Enemy {
+public class Worm : Enemy {
     protected override float maximumSpeed { get; set; } = 2f;
     protected override float maximumHealth { get; set; } = 50f;
     protected override float attackDamage { get; set; } = 10f;

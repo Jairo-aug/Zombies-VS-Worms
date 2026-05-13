@@ -45,9 +45,10 @@ public class Projetil : MonoBehaviour
     void HitTarget()
     {
         // Aplica dano ao inimigo, se ele tiver o componente necessário
-        Minhoca minhoca = target.GetComponent<Minhoca>();
+        // Refatorável
+        Worm minhoca = target.GetComponent<Worm>();
         Larva larva = target.GetComponent<Larva>();
-        Verme verme = target.GetComponent<Verme>();
+        Verm verme = target.GetComponent<Verm>();
 
         if (minhoca != null)
         {

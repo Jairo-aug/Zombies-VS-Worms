@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // Passa por cima dos zumbis.
-public class LarvaFly : Larva {
+public class FlyingLarva : Larva {
     // Somado em 20;
     protected override int expAmount { get; set; } = 50;
 

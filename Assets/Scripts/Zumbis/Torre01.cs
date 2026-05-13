@@ -92,9 +92,10 @@ public class Torre01 : MonoBehaviour
         }
 
         // Verifica e aplica dano com base no tipo de inimigo
-        Minhoca minhoca = target.GetComponent<Minhoca>();
+        // REFATORÁVEL
+        Worm minhoca = target.GetComponent<Worm>();
         Larva larva = target.GetComponent<Larva>();
-        Verme verme = target.GetComponent<Verme>();
+        Verm verme = target.GetComponent<Verm>();
 
         somAtaque.Play();
 

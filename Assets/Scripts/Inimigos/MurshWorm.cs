@@ -5,7 +5,7 @@ using UnityEngine;
 // ExpAmoun acrescido de 15;
 // Health acrescido em 10;
 // BonusDano acrescido em 5f;
-public class MinhocaMursh : Minhoca {
+public class MurshWorm : Worm {
     // Acrescido em 10f
     protected override float maximumHealth { get; set; } = 60f;
     // Acrescido em 5f
