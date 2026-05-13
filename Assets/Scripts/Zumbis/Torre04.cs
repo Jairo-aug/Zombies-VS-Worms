@@ -81,12 +81,13 @@ public class Torre04 : MonoBehaviour
 
         foreach (Collider2D collider in enemiesInRange)
         {
+            // REFATORÁVEL
             if (collider.CompareTag("Enemy"))
             {
                 // Verifica se o alvo possui os componentes válidos
-                Minhoca minhoca = collider.GetComponent<Minhoca>();
+                Worm minhoca = collider.GetComponent<Worm>();
                 Larva larva = collider.GetComponent<Larva>();
-                Verme verme = collider.GetComponent<Verme>();
+                Verm verme = collider.GetComponent<Verm>();
 
                 if (minhoca != null)
                 {

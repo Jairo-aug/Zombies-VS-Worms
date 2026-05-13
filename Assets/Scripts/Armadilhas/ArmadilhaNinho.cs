@@ -119,7 +119,7 @@ public class ArmadilhaNinho : MonoBehaviour
 
     public void OnTriggerEnter2D(Collider2D collider)
     {
-        if (collider.gameObject.TryGetComponent<Minhoca>(out Minhoca minhoca))
+        if (collider.gameObject.TryGetComponent<Worm>(out Worm minhoca))
         {
             minhoca.TakeDamage(30);
         }

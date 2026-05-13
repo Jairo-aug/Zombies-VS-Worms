@@ -35,9 +35,9 @@ public class SettingsMenu : MonoBehaviour
         resolutionDropdown.value = currentResolutionIndex;
         resolutionDropdown.RefreshShownValue();
 
-        audioMixer.SetFloat("GeneralVolume", audioMixer.GetFloat("GeneralVolume"));
-        audioMixer.SetFloat("MusicVolume", audioMixer.GetFloat("MusicVolume"));
-        audioMixer.SetFloat("EffectsVolume", audioMixer.GetFloat("EffectsVolume"));
+        audioMixer.SetFloat("GeneralVolume", 0.5f);
+        audioMixer.SetFloat("MusicVolume", 0.5f);
+        audioMixer.SetFloat("EffectsVolume", 0.5f);
     }
 
 
