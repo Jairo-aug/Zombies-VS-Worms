@@ -2,16 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class VermeFlash : Verme
-{
-    [SerializeField] private float bonusSpeed = 15f; 
-    
-    public new void Start()
-    {
-        base.Start(); // Garante que o Start da classe base seja chamado
-        maxSpeed += bonusSpeed; // Adiciona um bônus de velocidade
-        currentSpeed = maxSpeed; // Atualiza a velocidade atual
+// Se move mais rápido em 15f.
+// Dá 20 de xp a mais.
 
-        expAmount = 40; // Modifica o valor diretamente na classe base
-    }
+public class VermeFlash : Verme {
+    // Somado em 15f;
+    protected override float maxSpeed { get; set; } = 18.6f;
+    // Somado em 20;
+    protected override int expAmount { get; set; } = 40;
 }
