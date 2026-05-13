@@ -1,6 +1,5 @@
-using UnityEngine;
 using System.Collections;
-using System;
+using UnityEngine;
 
 public class Enemy : MonoBehaviour {
     protected Transform target; // O alvo a ser perseguido (a Pilha de Carne)
@@ -14,7 +13,7 @@ public class Enemy : MonoBehaviour {
     protected virtual float attackDamage { get; set; } = 10f;
     protected virtual float attackInterval { get; set; } = 2f;
     protected virtual int expAmount { get; set; } = 30;
-
+    protected virtual float dropChance { get; set; } = 20f;
 
     protected float currentHealth;
     protected EnemyHealthBar healthBar;
@@ -191,6 +190,8 @@ public class Enemy : MonoBehaviour {
         ExperienceManager.Instance.AddExperience(expAmount);
         pileOfFlesh.GerarPontos(expAmount);
         StartCoroutine(SumirEDestruir());
+
+        WillDropAnItem();
     }
 
     protected virtual void TargetIspileOfFlesh() {
@@ -204,5 +205,14 @@ public class Enemy : MonoBehaviour {
     public void levelUp() {
         maximumHealth += 25f;
         attackDamage += 4f;
+    }
+
+    protected bool WillDropAnItem() {
+        System.Random r = new System.Random();
+        int randomNumber = r.Next(0, 101);
+
+        Debug.Log($"Inimigo com {dropChance}% de taxa rodou {randomNumber}. Vai dropar? {randomNumber < dropChance}.");
+
+        return randomNumber < dropChance;
     }
 }
