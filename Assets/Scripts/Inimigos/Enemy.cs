@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Enemy : MonoBehaviour {
     protected Transform target; // O alvo a ser perseguido (a Pilha de Carne)
@@ -17,6 +18,8 @@ public class Enemy : MonoBehaviour {
 
     protected float currentHealth;
     protected EnemyHealthBar healthBar;
+
+    [SerializeField] protected Sprite placeholderItemDrop;
 
     
     protected PilhaDeCarne pileOfFlesh; // Referência à Pilha de Carne
@@ -189,9 +192,19 @@ public class Enemy : MonoBehaviour {
         // Gerar experiência e pontos
         ExperienceManager.Instance.AddExperience(expAmount);
         pileOfFlesh.GerarPontos(expAmount);
+
+        Vector3 lastPosition = transform.position;
+
         StartCoroutine(SumirEDestruir());
 
-        WillDropAnItem();
+        if (WillDropAnItem()) {
+            GameObject item = new GameObject("Item");
+            item.transform.position = lastPosition;
+            item.transform.localScale = new Vector3(3f, 3f, 3f);
+
+            SpriteRenderer itemSprite = item.AddComponent<SpriteRenderer>();
+            itemSprite.sprite = placeholderItemDrop;
+        }
     }
 
     protected virtual void TargetIspileOfFlesh() {
