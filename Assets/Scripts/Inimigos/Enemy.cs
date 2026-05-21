@@ -9,12 +9,12 @@ public class Enemy : MonoBehaviour {
 
     // ATRIBUTOS
     // Pode ser substituido por um scriptable object.
-    protected virtual float maximumSpeed { get; set; } = 1f;
-    protected virtual float maximumHealth { get; set; } = 85f;
-    protected virtual float attackDamage { get; set; } = 10f;
-    protected virtual float attackInterval { get; set; } = 2f;
-    protected virtual int expAmount { get; set; } = 30;
-    protected virtual float dropChance { get; set; } = 20f;
+    protected virtual float maximumSpeed { get; set; }
+    protected virtual float maximumHealth { get; set; }
+    protected virtual float attackDamage { get; set; }
+    protected virtual float attackInterval { get; set; }
+    protected virtual int expAmount { get; set; }
+    protected virtual float dropChance { get; set; }
 
     protected float currentHealth;
     protected EnemyHealthBar healthBar;
@@ -193,17 +193,13 @@ public class Enemy : MonoBehaviour {
         ExperienceManager.Instance.AddExperience(expAmount);
         pileOfFlesh.GerarPontos(expAmount);
 
-        Vector3 lastPosition = transform.position;
-
         StartCoroutine(SumirEDestruir());
 
         if (WillDropAnItem()) {
-            GameObject item = new GameObject("Item");
-            item.transform.position = lastPosition;
-            item.transform.localScale = new Vector3(3f, 3f, 3f);
-
-            SpriteRenderer itemSprite = item.AddComponent<SpriteRenderer>();
-            itemSprite.sprite = placeholderItemDrop;
+            GameObject item = new GameObject("Crazy Apple");
+            
+            Apple apple = item.AddComponent<Apple>();
+            apple.InstantiateItem(placeholderItemDrop, transform.position);
         }
     }
 
