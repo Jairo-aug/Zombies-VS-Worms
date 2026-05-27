@@ -17,7 +17,7 @@ public class ItemInteractionSystem : MonoBehaviour {
         
         if (Input.GetMouseButton(0) && hoveredObject != null) {
             if (hoveredObject.TryGetComponent<Item>(out var item)) {
-                item.OnHoveredAndClicked(inventory);
+                item.OnClicked(inventory);
             }
         }
     }

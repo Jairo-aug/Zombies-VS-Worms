@@ -9,12 +9,16 @@ public class Item : MonoBehaviour {
     protected ItemState currentState;
     protected BoxCollider2D boxCollider;
     
-    public void OnHoveredAndClicked(Inventory inventory) {
+    public void OnClicked(Inventory inventory) {
         switch(currentState) {
             case ItemState.OnGround:
                 Collect(inventory);
                 break;
             
+            case ItemState.InInventory:
+                Drag(inventory);
+                break;
+
             default: return;
         }
     }
@@ -27,20 +31,32 @@ public class Item : MonoBehaviour {
         spriteRenderer.sprite = sprite;
 
         boxCollider = gameObject.AddComponent<BoxCollider2D>();
+        boxCollider.isTrigger = true;
 
         currentState = ItemState.OnGround;
     }
 
     public void Collect(Inventory inventory) {
         currentState = ItemState.InInventory;
-        
+
         inventory.AddItem(gameObject);
-        Debug.Log("Click!");
+    }
+
+    public void Drag(Inventory inventory) {
+        currentState = ItemState.Dragging;
+
+        inventory.DragItem();
+    }
+
+    public void Place() {
+        currentState = ItemState.InUse;
+        Debug.Log("Placed");
     }
 
     protected enum ItemState {
         OnGround,
         InInventory,
+        Dragging,
         InUse
     }
 }
