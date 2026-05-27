@@ -24672,6 +24672,8 @@ GameObject:
   - component: {fileID: 1775389913}
   - component: {fileID: 1775389915}
   - component: {fileID: 1775389914}
+  - component: {fileID: 1775389917}
+  - component: {fileID: 1775389916}
   m_Layer: 5
   m_Name: "Invent\xE1rio"
   m_TagString: Untagged
@@ -24693,10 +24695,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 516979540}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 707.3, y: -288.05}
-  m_SizeDelta: {x: -1551.5, y: -792.86}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -614, y: -252.04}
+  m_SizeDelta: {x: 250, y: 250}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1775389914
 MonoBehaviour:
@@ -24736,6 +24738,33 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1775389912}
   m_CullTransparentMesh: 1
+--- !u!114 &1775389916
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1775389912}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0f965dacc1685642a67e8f48f12f729, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Inventory
+  storedItem: {fileID: 0}
+--- !u!114 &1775389917
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1775389912}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14324660356ed0441bab67cb54a1d1c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ItemInteractionSystem
+  cam: {fileID: 0}
+  inventory: {fileID: 1775389916}
 --- !u!1 &1777211009
 GameObject:
   m_ObjectHideFlags: 0

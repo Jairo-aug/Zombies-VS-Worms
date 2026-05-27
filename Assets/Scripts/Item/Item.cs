@@ -1,7 +1,6 @@
 using UnityEngine;
-using UnityEngine.UI;
 
-public class Item : MonoBehaviour, IHoverable {
+public class Item : MonoBehaviour {
     // ATRIBUTOS
     // Pode ser substituido por um scriptable object.
     protected virtual string itemName { get; set; }
@@ -10,18 +9,13 @@ public class Item : MonoBehaviour, IHoverable {
     protected ItemState currentState;
     protected BoxCollider2D boxCollider;
     
-    public virtual void Update() {
-        if (currentState == ItemState.Dropped) {
-            Vector3 mousePosition = Input.mousePosition;
-            Ray mouseRay = Camera.main.ScreenPointToRay(mousePosition);
-
-            RaycastHit2D raycastHit2D = Physics2D.Raycast(mouseRay.origin, mouseRay.direction);
-            Transform hoveredObject = raycastHit2D ? raycastHit2D.collider.transform : null;
-            bool isSameObject = hoveredObject != null && hoveredObject == gameObject.transform;
-
-            if (isSameObject && Input.GetMouseButton(0)) {
-                Debug.Log("Clicou e passou o mouse por cima da " + itemName + "!");
-            }
+    public void OnHoveredAndClicked(Inventory inventory) {
+        switch(currentState) {
+            case ItemState.OnGround:
+                Collect(inventory);
+                break;
+            
+            default: return;
         }
     }
 
@@ -34,11 +28,18 @@ public class Item : MonoBehaviour, IHoverable {
 
         boxCollider = gameObject.AddComponent<BoxCollider2D>();
 
-        currentState = ItemState.Dropped;
+        currentState = ItemState.OnGround;
+    }
+
+    public void Collect(Inventory inventory) {
+        currentState = ItemState.InInventory;
+        
+        inventory.AddItem(gameObject);
+        Debug.Log("Click!");
     }
 
     protected enum ItemState {
-        Dropped,
+        OnGround,
         InInventory,
         InUse
     }
