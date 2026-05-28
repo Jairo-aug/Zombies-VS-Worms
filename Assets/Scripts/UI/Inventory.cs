@@ -11,7 +11,7 @@ public class Inventory : MonoBehaviour {
 
             cursor.transform.position = new Vector3(mousePosition.x, mousePosition.y, 0);
 
-            if (Input.GetMouseButtonUp(0)) {
+            if (Input.GetMouseButtonDown(0)) {
                 AttemptPlace(mousePosition);
             }
         } 
@@ -66,12 +66,13 @@ public class Inventory : MonoBehaviour {
             Debug.Log("Plop");
             
             cursor.SetActive(false);
-            Place();
+            Place(closestZombie);
         }
     }
 
-    private void Place() {
-        storedItem.GetComponent<Item>().Place();
+    // Passar o zumbi escolhido como parâmetro tipado como Zombie.
+    private void Place(GameObject closestZombie) {
+        storedItem.GetComponent<Item>().Place(closestZombie);
         RemoveItem();
     }
 

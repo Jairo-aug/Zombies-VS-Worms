@@ -5425,6 +5425,7 @@ MonoBehaviour:
   fadeDuration: 0.5
   damageFlashDuration: 0.1
   damageFlashColor: {r: 1, g: 0, b: 0, a: 1}
+  upgradedZombie: {fileID: -4689406079702324653, guid: 1ddc9afd21fec77489b1248d18f31b68, type: 3}
 --- !u!114 &639266311819924230
 MonoBehaviour:
   m_ObjectHideFlags: 0
