@@ -50,6 +50,7 @@ public class Item : MonoBehaviour {
 
     public void Place() {
         currentState = ItemState.InUse;
+        
         Debug.Log("Placed");
     }
 

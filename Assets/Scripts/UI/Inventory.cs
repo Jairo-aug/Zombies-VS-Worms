@@ -12,12 +12,7 @@ public class Inventory : MonoBehaviour {
             cursor.transform.position = new Vector3(mousePosition.x, mousePosition.y, 0);
 
             if (Input.GetMouseButtonUp(0)) {
-                isItemBeingDraggedOut = false;
-
-                Debug.Log("Plop");
-                
-                cursor.SetActive(false);
-                Place();
+                AttemptPlace(mousePosition);
             }
         } 
     }
@@ -62,9 +57,43 @@ public class Inventory : MonoBehaviour {
         storedItem.SetActive(false);
     }
 
-    public void Place() {
+    private void AttemptPlace(Vector3 mousePosition) {
+        GameObject closestZombie = GetClosestZombie(mousePosition);
+
+        if (closestZombie != null) {
+            isItemBeingDraggedOut = false;
+
+            Debug.Log("Plop");
+            
+            cursor.SetActive(false);
+            Place();
+        }
+    }
+
+    private void Place() {
         storedItem.GetComponent<Item>().Place();
         RemoveItem();
+    }
+
+    private GameObject GetClosestZombie(Vector3 mousePosition) {
+        Collider2D[] nearbyZombies = Physics2D.OverlapCircleAll(mousePosition, 1f);
+
+        GameObject closest = null;
+        float closestDistance = Mathf.Infinity;
+
+        foreach (Collider2D z in nearbyZombies) {
+            // No futuro verificar se objeto tem um script de classe Zombie ao invés.
+            if (!z.CompareTag("Player")) continue;
+
+            float distance = Vector3.SqrMagnitude(z.transform.position - transform.position);
+
+            if (distance < closestDistance) {
+                closestDistance = distance;
+                closest = z.gameObject;
+            }
+        }
+
+        return closest;
     }
 
     private void RemoveItem() {

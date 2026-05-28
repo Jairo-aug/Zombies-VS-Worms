@@ -208,4 +208,8 @@ public class Torre04 : MonoBehaviour
         timeUntilUpgrade = upgradeTime;
 
     }
+
+    void ItemUpgrade() {
+        Debug.Log("Item Upgrade no " + this.GetType().Name + "!");
+    }
 }
