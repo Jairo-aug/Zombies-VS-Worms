@@ -29,6 +29,9 @@ public class Torre01 : MonoBehaviour
     [SerializeField] private Color damageFlashColor = Color.red; // Cor do flash de dano
     private SpriteRenderer spriteRenderer;
     private PilhaDeCarne pilhaDeCarne;
+    
+    // Template
+    [SerializeField] private Sprite upgradedZombie;
 
     void Start()
     {
@@ -210,5 +213,10 @@ public class Torre01 : MonoBehaviour
         currentHealth = maxHealth;
         healthBar.UpdateSlider(currentHealth);
         timeUntilUpgrade = upgradeTime;
+    }
+
+    public void ItemUpgrade() {
+        Debug.Log("Item Upgrade no " + this.GetType().Name + "!");
+        spriteRenderer.sprite = upgradedZombie;
     }
 }

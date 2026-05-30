@@ -31,6 +31,9 @@ public class Torre04 : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     private PilhaDeCarne pilhaDeCarne;
 
+    // Template
+    [SerializeField] private Sprite upgradedZombie;
+
     void Start()
     {
         somUpgrade = GetComponent<AudioSource>();
@@ -207,5 +210,10 @@ public class Torre04 : MonoBehaviour
         healthBar.UpdateSlider(currentHealth);
         timeUntilUpgrade = upgradeTime;
 
+    }
+
+    public void ItemUpgrade() {
+        Debug.Log("Item Upgrade no " + this.GetType().Name + "!");
+        spriteRenderer.sprite = upgradedZombie;
     }
 }

@@ -14,4 +14,7 @@ public class MurshWorm : Worm {
     protected override float attackInterval { get; set; } = 1.8f;
     // Acrescido em 15
     protected override int expAmount { get; set; } = 30;
+    
+    // Chance padrão: 10%
+    protected override float dropChance { get; set; } = 80f;
 }

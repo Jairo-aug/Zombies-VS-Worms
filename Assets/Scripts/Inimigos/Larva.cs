@@ -4,4 +4,7 @@ public class Larva : Enemy {
     protected override float attackDamage { get; set; } = 10f;
     protected override float attackInterval { get; set; } = 2f;
     protected override int expAmount { get; set; } = 30;
+    
+    // Chance padrão: 5%
+    protected override float dropChance { get; set; } = 80f;
 }

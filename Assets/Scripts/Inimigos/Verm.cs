@@ -8,4 +8,7 @@ public class Verm : Enemy {
     protected override float attackDamage { get; set; } = 10f;
     protected override float attackInterval { get; set; } = 1.5f;
     protected override int expAmount { get; set; } = 20;
+    
+    // Chance padrão: 5%
+    protected override float dropChance { get; set; } = 80f;
 }

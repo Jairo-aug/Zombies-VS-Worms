@@ -1,6 +1,6 @@
-using UnityEngine;
 using System.Collections;
-using System;
+using UnityEngine;
+using UnityEngine.UI;
 
 public class Enemy : MonoBehaviour {
     protected Transform target; // O alvo a ser perseguido (a Pilha de Carne)
@@ -9,15 +9,17 @@ public class Enemy : MonoBehaviour {
 
     // ATRIBUTOS
     // Pode ser substituido por um scriptable object.
-    protected virtual float maximumSpeed { get; set; } = 1f;
-    protected virtual float maximumHealth { get; set; } = 85f;
-    protected virtual float attackDamage { get; set; } = 10f;
-    protected virtual float attackInterval { get; set; } = 2f;
-    protected virtual int expAmount { get; set; } = 30;
-
+    protected virtual float maximumSpeed { get; set; }
+    protected virtual float maximumHealth { get; set; }
+    protected virtual float attackDamage { get; set; }
+    protected virtual float attackInterval { get; set; }
+    protected virtual int expAmount { get; set; }
+    protected virtual float dropChance { get; set; }
 
     protected float currentHealth;
     protected EnemyHealthBar healthBar;
+
+    [SerializeField] protected Sprite placeholderItemDrop;
 
     
     protected PilhaDeCarne pileOfFlesh; // Referência à Pilha de Carne
@@ -190,7 +192,15 @@ public class Enemy : MonoBehaviour {
         // Gerar experiência e pontos
         ExperienceManager.Instance.AddExperience(expAmount);
         pileOfFlesh.GerarPontos(expAmount);
+
         StartCoroutine(SumirEDestruir());
+
+        if (WillDropAnItem()) {
+            GameObject item = new GameObject("Crazy Apple");
+            
+            Apple apple = item.AddComponent<Apple>();
+            apple.InstantiateItem(placeholderItemDrop, transform.position);
+        }
     }
 
     protected virtual void TargetIspileOfFlesh() {
@@ -204,5 +214,14 @@ public class Enemy : MonoBehaviour {
     public void levelUp() {
         maximumHealth += 25f;
         attackDamage += 4f;
+    }
+
+    protected bool WillDropAnItem() {
+        System.Random r = new System.Random();
+        int randomNumber = r.Next(0, 101);
+
+        Debug.Log($"Inimigo com {dropChance}% de taxa rodou {randomNumber}. Vai dropar? {randomNumber < dropChance}.");
+
+        return randomNumber < dropChance;
     }
 }

@@ -6,6 +6,9 @@ using UnityEngine;
 public class FlyingLarva : Larva {
     // Somado em 20;
     protected override int expAmount { get; set; } = 50;
+    
+    // Chance padrão: 10%
+    protected override float dropChance { get; set; } = 80f;
 
     protected override void Update() {
         timeSinceLastHit += Time.deltaTime;
