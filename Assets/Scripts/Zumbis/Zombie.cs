@@ -6,18 +6,17 @@ public class Zombie : MonoBehaviour {
     // Atributos
     public virtual string zombieName { get; protected set; }
     public virtual float zombieCost { get; protected set; }
-    public virtual float attackRange { get; protected set; }
+    public virtual float range { get; protected set; }
     public virtual float attackCooldown { get; protected set; }
     public virtual float damage { get; protected set; }
     public virtual float maxHealth { get; protected set; }
 
     protected float attackCooldownTimer;
     protected Animator animator;
-    
     protected float timeUntilUpgrade, upgradeTime = 45f;
-    
     protected float currentHealth;
     protected SliderBar healthBar;
+    [SerializeField] protected Sprite upgradedZombie;
 
     // Efeitos Sonoros
     [SerializeField] protected AudioSource somUpgrade;
@@ -151,4 +150,6 @@ public class Zombie : MonoBehaviour {
         healthBar.UpdateSlider(currentHealth);
         timeUntilUpgrade = upgradeTime;
     }
+
+    public void ItemUpgrade() => spriteRenderer.sprite = upgradedZombie;
 }
