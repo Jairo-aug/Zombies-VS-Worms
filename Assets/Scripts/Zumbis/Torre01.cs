@@ -1,18 +1,15 @@
 using UnityEngine;
 using System;
 
-public class Torre01 : MonoBehaviour
-{
-    public int custo = 100; // Custo da Torre 1
-    public float attackRange = 0.5f; // Alcance de ataque da torre
-    public float attackCooldown = 2f; // Tempo entre ataques
-    public float dano = 20f; // Dano que a torre causa por ataque
-    private float attackCooldownTimer;
-    private Animator anim; // Referência ao componente Animator
-    
-    [SerializeField] float timeUntilUpgrade, upgradeTime = 45f;
-    [SerializeField] ParticleSystem evolutionEffect;
+public class Zomboxer : Zombie {
+    public override string zombieName { get; protected set; } = "Zomboxer";
+    public override float zombieCost { get; protected set; } = 100f;
+    public override float attackRange { get; protected set; } = 0.5f;
+    public override float attackCooldown { get; protected set; } = 2f;
+    public override float damage { get; protected set; } = 20f;
+    public override float maxHealth { get; protected set; } = 50f;
 
+<<<<<<< Updated upstream
     [SerializeField] float currentHealth, maxHealth = 100f; // Vida máxima da torre
     [SerializeField] SliderBar healthBar; // Referência à barra de vida
 
@@ -59,6 +56,9 @@ public class Torre01 : MonoBehaviour
 
     void Update()
     {
+=======
+    protected override void Update() {
+>>>>>>> Stashed changes
         attackCooldownTimer -= Time.deltaTime;
         timeUntilUpgrade -= Time.deltaTime;
 
@@ -86,12 +86,11 @@ public class Torre01 : MonoBehaviour
         }
     }
 
-    void Attack(GameObject target)
-    {
-        if (anim != null)
+    protected override void Attack(GameObject target) {
+        if (animator != null)
         {
-            anim.SetTrigger("IsAttacking");
-            Debug.Log("Animação de ataque acionada!");
+            animator.SetTrigger("IsAttacking");
+            Debug.Log("animatoração de ataque acionada!");
         }
 
         // Verifica e aplica dano com base no tipo de inimigo
@@ -104,17 +103,18 @@ public class Torre01 : MonoBehaviour
 
         if (minhoca != null)
         {
-            minhoca.TakeDamage(dano);
+            minhoca.TakeDamage(damage);
         }
         else if (larva != null)
         {
-            larva.TakeDamage(dano);
+            larva.TakeDamage(damage);
         }
         else if (verme != null)
         {
-            verme.TakeDamage(dano);
+            verme.TakeDamage(damage);
         }
     }
+<<<<<<< Updated upstream
 
     public void TakeDamage(float damage)
     {
@@ -219,4 +219,6 @@ public class Torre01 : MonoBehaviour
         Debug.Log("Item Upgrade no " + this.GetType().Name + "!");
         spriteRenderer.sprite = upgradedZombie;
     }
+=======
+>>>>>>> Stashed changes
 }

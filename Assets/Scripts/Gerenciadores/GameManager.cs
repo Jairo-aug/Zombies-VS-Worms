@@ -77,13 +77,13 @@ public class GameManager : MonoBehaviour
     private int GetTorreCusto(GameObject torre)
     {
         // Obtém o componente de torre do prefab
-        var torreComponent = torre.GetComponent<Torre01>() ?? (object)torre.GetComponent<Torre02>() ?? torre.GetComponent<Torre03>();
+        Zombie z = GetComponent<Zombie>();
 
-        if (torreComponent != null)
+        if (z != null)
         {
             // Usa reflexão para obter o campo custo
-            var custoField = torreComponent.GetType().GetField("custo");
-            return custoField != null ? (int)custoField.GetValue(torreComponent) : 0;
+            var custoField = z.GetType().GetField("custo");
+            return custoField != null ? (int)custoField.GetValue(z) : 0;
         }
 
         Debug.LogError("Componente da torre não encontrado.");

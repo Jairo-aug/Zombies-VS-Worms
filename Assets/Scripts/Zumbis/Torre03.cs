@@ -1,14 +1,15 @@
 using UnityEngine;
 using System;
 
-public class Torre03 : MonoBehaviour
-{
-    public int custo = 150;
-    public GameObject projectilePrefab; // Prefab do projétil
-    public float attackRange = 5f; // Alcance de ataque da torre
-    public float attackCooldown = 2f; // Tempo entre ataques
-    private float attackCooldownTimer;
+public class Vertebrawler : Zombie {
+    public override string zombieName { get; protected set; } = "Vertebrawler";
+    public override float zombieCost { get; protected set; } = 150f;
+    public override float attackRange { get; protected set; } = 4.4f;
+    public override float attackCooldown { get; protected set; } = 2f;
+    public override float damage { get; protected set; } = 0f;
+    public override float maxHealth { get; protected set; } = 50f;
 
+<<<<<<< Updated upstream
     [SerializeField] float currentHealth, maxHealth = 50f;
     [SerializeField] SliderBar healthBar;
 
@@ -60,6 +61,14 @@ public class Torre03 : MonoBehaviour
 
     void Update()
     {
+=======
+    // Prefabs
+    [SerializeField] private GameObject projectilePrefab;
+    private float projectileLifetime = 3f;
+    private bool isUpgrade;
+    
+    protected override void Update() {
+>>>>>>> Stashed changes
         attackCooldownTimer -= Time.deltaTime;
         timeUntilUpgrade -= Time.deltaTime;
 
@@ -92,7 +101,7 @@ public class Torre03 : MonoBehaviour
         }
     }
 
-    void Attack(GameObject target)
+    protected override void Attack(GameObject target)
     {
         GameObject projectile = Instantiate(projectilePrefab, transform.position, Quaternion.identity);
         
@@ -124,6 +133,7 @@ public class Torre03 : MonoBehaviour
 
         Destroy(projectile, projectileLifetime);
     }
+<<<<<<< Updated upstream
 
 
     public void TakeDamage(float damage)
@@ -233,3 +243,6 @@ public class Torre03 : MonoBehaviour
         spriteRenderer.sprite = upgradedZombie;
     }
 }
+=======
+}
+>>>>>>> Stashed changes

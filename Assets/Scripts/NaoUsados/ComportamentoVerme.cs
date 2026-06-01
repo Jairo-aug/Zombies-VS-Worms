@@ -138,29 +138,8 @@ public class ComportamentoVerme : MonoBehaviour
 
     void Attack(GameObject target)
     {
-        // Aplica dano diretamente ao inimigo mais próximo
-
-        if(target.gameObject.TryGetComponent<Torre01>(out Torre01 torre01))
-        {
-            torre01.TakeDamage(danoAtaque);
-        }
-
-        else if(target.gameObject.TryGetComponent<Torre02>(out Torre02 torre02))
-        {
-            torre02.TakeDamage(danoAtaque);
-        }
-
-        else if(target.gameObject.TryGetComponent<Torre03>(out Torre03 torre03))
-        {
-            torre03.TakeDamage(danoAtaque);
-        }
-
-        else if(target.gameObject.TryGetComponent<PilhaDeCarne>(out PilhaDeCarne pilhaDeCarne))
-        {
-            pilhaDeCarne.TakeDamage(danoAtaque);
-        }
-                
-        Debug.Log("Verme atacou o inimigo diretamente." + target.name);
+        Zombie z = target.GetComponent<Zombie>();
+        z.TakeDamage(danoAtaque);
     }
 
     public void levelUp()

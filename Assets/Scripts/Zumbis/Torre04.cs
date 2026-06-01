@@ -2,17 +2,17 @@ using System.Linq;
 using UnityEngine;
 using System;
 
-public class Torre04 : MonoBehaviour
-{
-    public int custo = 150; // Custo da Torre 4
-    public float attackRange = 2.5f; // Alcance de ataque da torre
-    public float attackCooldown = 3f; // Tempo entre ataques
-    public float dano = 50f; // Dano por ataque
-    private float attackCooldownTimer;
+public class Decompoison : Zombie {
+    public override string zombieName { get; protected set; } = "Deadefensive";
+    public override float zombieCost { get; protected set; } = 150f;
+    public override float attackRange { get; protected set; } = 2.5f;
+    public override float attackCooldown { get; protected set; } = 2f;
+    public override float damage { get; protected set; } = 50f;
+    public override float maxHealth { get; protected set; } = 120f;
 
-    [SerializeField] float currentHealth, maxHealth = 120f; // Vida máxima da torre
-    [SerializeField] SliderBar healthBar; // Referência à barra de vida
+    [SerializeField] private ParticleSystem bombEffect;
 
+<<<<<<< Updated upstream
     [SerializeField] float timeUntilUpgrade, upgradeTime = 45f;
     [SerializeField] ParticleSystem evolutionEffect;
     [SerializeField] ParticleSystem bombEffect;
@@ -59,6 +59,10 @@ public class Torre04 : MonoBehaviour
 
     void Update()
     {
+=======
+    protected override void Update() {
+        Debug.Log($"Cooldown de ataque do Deocmpoision: {attackCooldownTimer}");
+>>>>>>> Stashed changes
         attackCooldownTimer -= Time.deltaTime;
 
         if (attackCooldownTimer <= 0f)
@@ -94,19 +98,20 @@ public class Torre04 : MonoBehaviour
 
                 if (minhoca != null)
                 {
-                    minhoca.TakeDamage(dano);
+                    minhoca.TakeDamage(damage);
                 }
                 else if (larva != null)
                 {
-                    larva.TakeDamage(dano);
+                    larva.TakeDamage(damage);
                 }
                 else if (verme != null)
                 {
-                    verme.TakeDamage(dano);
+                    verme.TakeDamage(damage);
                 }
             }
         }
     }
+<<<<<<< Updated upstream
 
     public void TakeDamage(float damage)
     {
@@ -216,4 +221,6 @@ public class Torre04 : MonoBehaviour
         Debug.Log("Item Upgrade no " + this.GetType().Name + "!");
         spriteRenderer.sprite = upgradedZombie;
     }
+=======
+>>>>>>> Stashed changes
 }
