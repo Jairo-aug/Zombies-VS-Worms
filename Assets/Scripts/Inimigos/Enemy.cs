@@ -122,27 +122,8 @@ public class Enemy : MonoBehaviour {
     }
 
     protected virtual void Attack(GameObject target) {
-        // Aplica dano diretamente ao inimigo mais próximo
-
-        if(target.gameObject.TryGetComponent<Torre01>(out Torre01 torre01)) {
-            torre01.TakeDamage(attackDamage);
-        }
-
-        else if(target.gameObject.TryGetComponent<Torre02>(out Torre02 torre02)) {
-            torre02.TakeDamage(attackDamage);
-        }
-
-        else if(target.gameObject.TryGetComponent<Torre03>(out Torre03 torre03)) {
-            torre03.TakeDamage(attackDamage);
-        }
-
-        else if(target.gameObject.TryGetComponent<Torre04>(out Torre04 torre04)) {
-            torre04.TakeDamage(attackDamage);
-        }
-
-        else if(target.gameObject.TryGetComponent<PilhaDeCarne>(out PilhaDeCarne pileOfFlesh)) {
-            pileOfFlesh.TakeDamage(attackDamage);
-        } 
+        Zombie z = target.GetComponent<Zombie>();
+        z.TakeDamage(attackDamage);
     }
 
     public virtual void TakeDamage(float damage) {

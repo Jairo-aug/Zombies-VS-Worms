@@ -37,15 +37,6 @@ public class GerenciadorCompras : MonoBehaviour
 
     private void OnEnable()
     {
-        Torre01.OnTorreMorreu += UpdateListaTorres;
-        Torre02.OnTorreMorreu += UpdateListaTorres;
-        Torre03.OnTorreMorreu += UpdateListaTorres;
-        Torre04.OnTorreMorreu += UpdateListaTorres;
-
-        ArmadilhaCasulo.OnTorreMorreu += UpdateListaTorres;
-        ArmadilhaNinho.OnTorreMorreu += UpdateListaTorres;
-        ArmadilhaVermifugo.OnTorreMorreu += UpdateListaTorres;
-
         cursorRenderer = cursorTorre.GetComponent<SpriteRenderer>();
         somColocartorre = GetComponent<AudioSource>();
 
@@ -65,18 +56,6 @@ public class GerenciadorCompras : MonoBehaviour
         pilhaDeCarne = FindObjectOfType<PilhaDeCarne>();
     }
 
-    private void OnDisable()
-    {
-        Torre01.OnTorreMorreu -= UpdateListaTorres;
-        Torre02.OnTorreMorreu -= UpdateListaTorres;
-        Torre03.OnTorreMorreu -= UpdateListaTorres;
-        Torre04.OnTorreMorreu -= UpdateListaTorres;
-
-        ArmadilhaCasulo.OnTorreMorreu -= UpdateListaTorres;
-        ArmadilhaNinho.OnTorreMorreu -= UpdateListaTorres;
-        ArmadilhaVermifugo.OnTorreMorreu -= UpdateListaTorres;
-    }
-
     private void UpdateListaTorres(GameObject torre)
     {
         Vector2Int keyToRemove = Vector2Int.zero;
@@ -92,6 +71,9 @@ public class GerenciadorCompras : MonoBehaviour
         if (keyToRemove != null)
         {
             posicoesTorres.Remove(keyToRemove);
+           
+            Zombie z = torreAtual.GetComponent<Zombie>();
+            z.OnTorreMorreu += UpdateListaTorres;
         }
         
     }
@@ -209,6 +191,9 @@ public class GerenciadorCompras : MonoBehaviour
         GameObject temp = Instantiate(torreAtual, GetWorldPosition(x, y), Quaternion.identity);
         posicoesTorres.Add(new Vector2Int(x, y),temp);
         somColocartorre.Play();
+        
+        Zombie torre = torreAtual.GetComponent<Zombie>();
+        torre.OnTorreMorreu += UpdateListaTorres;
 
         // Desativa as imagens de indicação
         imagemIndicacaoZumbi.SetActive(false);

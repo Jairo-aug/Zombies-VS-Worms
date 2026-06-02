@@ -1,97 +1,85 @@
 using UnityEngine;
 using System;
+using System.Collections;
 
-public class Torre02 : MonoBehaviour
-{
-    public int custo = 200; // Custo da Torre 2
-    [SerializeField] float currentHealth, maxHealth = 300f; // Vida máxima da torre (muito alta)
-    [SerializeField] SliderBar healthBar; // Referência à barra de vida
+public class Zombie : MonoBehaviour {
+    public ZombieData attributes;
 
-    [SerializeField] float timeUntilUpgrade, upgradeTime = 45f;
-    [SerializeField] ParticleSystem evolutionEffect;
-    private AudioSource somUpgrade;
-    [SerializeField] AudioSource somMorte;
+    protected float attackCooldownTimer;
+    protected Animator animator;
+    protected float timeUntilUpgrade, upgradeTime = 45f;
+    protected float currentHealth;
+    protected SliderBar healthBar;
+    [SerializeField] protected Sprite normalSprite;
+    [SerializeField] protected Sprite upgradedZombie;
 
-    public static event Action<GameObject> OnTorreMorreu;
+    // Efeitos Sonoros
+    [SerializeField] protected AudioSource upgradeSFX;
+    [SerializeField] protected AudioSource deathSFX;
+    [SerializeField] protected AudioSource attackSFX;
+    [SerializeField] protected ParticleSystem evolutionEffect;
+    public event Action<GameObject> OnTorreMorreu;
 
     // Modificações Visuais
+    protected float fadeDuration = 0.5f;
+    protected float damageFlashDuration = 0.1f;
+    protected Color damageFlashColor = Color.red;
+    protected SpriteRenderer spriteRenderer;
+    protected PilhaDeCarne pilhaDeCarne;
 
-    [SerializeField] private float fadeDuration = 0.5f; // Duração do fade-out
-    [SerializeField] private float damageFlashDuration = 0.1f; // Duração do flash de dano
-    [SerializeField] private Color damageFlashColor = Color.red; // Cor do flash de dano
-    private SpriteRenderer spriteRenderer;
-    private PilhaDeCarne pilhaDeCarne;
-    
-    // Template
-    [SerializeField] private Sprite upgradedZombie;
+    protected void Start() {
+        animator = GetComponent<Animator>();
+        
+        upgradeSFX = GetComponent<AudioSource>();
+        deathSFX = GetComponent<AudioSource>();
 
-    void Start()
-    {
-        somUpgrade = GetComponent<AudioSource>();
-        somMorte = GetComponent<AudioSource>();
         healthBar = GetComponentInChildren<SliderBar>();
-        currentHealth = maxHealth;
-        healthBar.Set(maxHealth, currentHealth);
+        currentHealth = attributes.maxHealth;
+        healthBar.Set(attributes.maxHealth, currentHealth);
         timeUntilUpgrade = upgradeTime;
 
-        // Modificações Visuais
-
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        spriteRenderer.sprite = normalSprite;
 
         GameObject pilhaDeCarneObject = GameObject.FindGameObjectWithTag("PilhaDeCarne");
 
-        if (pilhaDeCarneObject != null)
-        {
+        if (pilhaDeCarneObject != null) {
             pilhaDeCarne = pilhaDeCarneObject.GetComponent<PilhaDeCarne>();
         }
-    
     }
 
-    void Update()
-    {
-        if (timeUntilUpgrade <= 0f)
-        {
-            UpgradeStatus();
-        }
-    }
+    protected virtual void Update() { }
 
-    // Método chamado quando a torre recebe dano
-    public void TakeDamage(float damage)
-    {
+    protected virtual void Attack(GameObject target) { }
+
+    public void TakeDamage(float damage) {
         currentHealth -= damage;
         healthBar.UpdateSlider(currentHealth);
 
-        // Modificações Visuais
-
         StartCoroutine(DamageFlashEffect());
 
-        if (currentHealth <= 0)
-        {
+        if (currentHealth <= 0) {
             Die();
         }
 
     }
 
-    void Die()
-    {
-        somMorte.Play();
+    protected void Die() {
+        deathSFX.Play();
         StartCoroutine(SumirEDestruir());
     }
 
-    void OnMouseOver()
+    protected void OnMouseOver()
     {
-        if (Input.GetMouseButtonDown(1)) // Botão direito do mouse
-        {
+        if (Input.GetMouseButtonDown(1)) {
             DestruirZumbi();
         }
     }
 
-    // Função para quando você clica com o botão direito no zumbi
-
-    void DestruirZumbi()
+    protected void DestruirZumbi()
     {
         // Calcula a metade do custo
-        int pontosRecuperados = Mathf.FloorToInt(custo / 2.0f);
+        int pontosRecuperados = Mathf.FloorToInt(attributes.zombieCost / 2.0f);
 
         // Recupera os pontos na Pilha de Carne
         if (pilhaDeCarne != null)
@@ -109,8 +97,7 @@ public class Torre02 : MonoBehaviour
 
     // Modificações Visuais
 
-    System.Collections.IEnumerator SumirEDestruir()
-    {
+    protected IEnumerator SumirEDestruir() {
         if (spriteRenderer != null)
         {
             Color originalColor = spriteRenderer.color;
@@ -130,8 +117,7 @@ public class Torre02 : MonoBehaviour
         Destroy(gameObject);
     }
 
-    private System.Collections.IEnumerator DamageFlashEffect()
-    {
+    protected IEnumerator DamageFlashEffect() {
         if (spriteRenderer != null)
         {
             // Armazena a cor original do zumbi
@@ -148,18 +134,19 @@ public class Torre02 : MonoBehaviour
         }
     }
 
-    void UpgradeStatus()
-    {
+    protected void UpgradeStatus() {
         evolutionEffect.Play();
-        somUpgrade.Play();
-        maxHealth += 50f;
-        currentHealth = maxHealth;
+        upgradeSFX.Play();
+
+        Debug.Log("Deu upgrade no " + attributes.zombieName);
+
+        attributes.damage += 10f;
+        attributes.maxHealth += 30f;
+        currentHealth = attributes.maxHealth;
+        
         healthBar.UpdateSlider(currentHealth);
         timeUntilUpgrade = upgradeTime;
     }
 
-    public void ItemUpgrade() {
-        Debug.Log("Item Upgrade no " + this.GetType().Name + "!");
-        spriteRenderer.sprite = upgradedZombie;
-    }
+    public void ItemUpgrade() => spriteRenderer.sprite = upgradedZombie;
 }

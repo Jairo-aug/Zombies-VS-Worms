@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 33cd94972cca07c488633baa76d48596
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - attributes: {fileID: 11400000, guid: de3baeed6d5407549a916e56f661e857, type: 2}
+  - normalSprite: {instanceID: 0}
+  - upgradedZombie: {instanceID: 0}
+  - somUpgrade: {instanceID: 0}
+  - somMorte: {instanceID: 0}
+  - somAtaque: {instanceID: 0}
+  - evolutionEffect: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
