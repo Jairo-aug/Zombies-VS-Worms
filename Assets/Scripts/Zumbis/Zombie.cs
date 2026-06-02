@@ -3,19 +3,14 @@ using System;
 using System.Collections;
 
 public class Zombie : MonoBehaviour {
-    // Atributos
-    public virtual string zombieName { get; protected set; }
-    public virtual float zombieCost { get; protected set; }
-    public virtual float range { get; protected set; }
-    public virtual float attackCooldown { get; protected set; }
-    public virtual float damage { get; protected set; }
-    public virtual float maxHealth { get; protected set; }
+    public ZombieData attributes;
 
     protected float attackCooldownTimer;
     protected Animator animator;
     protected float timeUntilUpgrade, upgradeTime = 45f;
     protected float currentHealth;
     protected SliderBar healthBar;
+    [SerializeField] protected Sprite normalSprite;
     [SerializeField] protected Sprite upgradedZombie;
 
     // Efeitos Sonoros
@@ -39,12 +34,12 @@ public class Zombie : MonoBehaviour {
         somMorte = GetComponent<AudioSource>();
 
         healthBar = GetComponentInChildren<SliderBar>();
-        currentHealth = maxHealth;
-        healthBar.Set(maxHealth, currentHealth);
+        currentHealth = attributes.maxHealth;
+        healthBar.Set(attributes.maxHealth, currentHealth);
         timeUntilUpgrade = upgradeTime;
 
-
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        spriteRenderer.sprite = normalSprite;
 
         GameObject pilhaDeCarneObject = GameObject.FindGameObjectWithTag("PilhaDeCarne");
 
@@ -84,7 +79,7 @@ public class Zombie : MonoBehaviour {
     protected void DestruirZumbi()
     {
         // Calcula a metade do custo
-        int pontosRecuperados = Mathf.FloorToInt(zombieCost / 2.0f);
+        int pontosRecuperados = Mathf.FloorToInt(attributes.zombieCost / 2.0f);
 
         // Recupera os pontos na Pilha de Carne
         if (pilhaDeCarne != null)
@@ -143,10 +138,10 @@ public class Zombie : MonoBehaviour {
     {
         evolutionEffect.Play();
         somUpgrade.Play();
-        Debug.Log("Deu upgrade no " + zombieName);
-        damage += 10f;
-        maxHealth += 30f;
-        currentHealth = maxHealth;
+        Debug.Log("Deu upgrade no " + attributes.zombieName);
+        attributes.damage += 10f;
+        attributes.maxHealth += 30f;
+        currentHealth = attributes.maxHealth;
         healthBar.UpdateSlider(currentHealth);
         timeUntilUpgrade = upgradeTime;
     }

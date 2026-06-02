@@ -2,13 +2,6 @@ using UnityEngine;
 using System;
 
 public class Vertebrawler : Zombie {
-    public override string zombieName { get; protected set; } = "Vertebrawler";
-    public override float zombieCost { get; protected set; } = 150f;
-    public override float range { get; protected set; } = 4.4f;
-    public override float attackCooldown { get; protected set; } = 2f;
-    public override float damage { get; protected set; } = 0f;
-    public override float maxHealth { get; protected set; } = 50f;
-
     // Prefabs
     [SerializeField] private GameObject projectilePrefab;
     private float projectileLifetime = 3f;
@@ -18,7 +11,7 @@ public class Vertebrawler : Zombie {
         attackCooldownTimer -= Time.deltaTime;
         timeUntilUpgrade -= Time.deltaTime;
 
-        Collider2D[] enemiesInRange = Physics2D.OverlapCircleAll(transform.position, range);
+        Collider2D[] enemiesInRange = Physics2D.OverlapCircleAll(transform.position, attributes.range);
         GameObject closestEnemy = null;
         float shortestDistance = Mathf.Infinity;
 
@@ -38,7 +31,7 @@ public class Vertebrawler : Zombie {
         if (closestEnemy != null && attackCooldownTimer <= 0f)
         {
             Attack(closestEnemy);
-            attackCooldownTimer = attackCooldown;
+            attackCooldownTimer = attributes.attackCooldown;
         }
 
         if (timeUntilUpgrade <= 0f)

@@ -2,13 +2,6 @@ using UnityEngine;
 using System;
 
 public class Zomboxer : Zombie {
-    public override string zombieName { get; protected set; } = "Zomboxer";
-    public override float zombieCost { get; protected set; } = 100f;
-    public override float range { get; protected set; } = 0.5f;
-    public override float attackCooldown { get; protected set; } = 2f;
-    public override float damage { get; protected set; } = 20f;
-    public override float maxHealth { get; protected set; } = 50f;
-
     protected override void Update() {
         attackCooldownTimer -= Time.deltaTime;
         timeUntilUpgrade -= Time.deltaTime;
@@ -17,7 +10,7 @@ public class Zomboxer : Zombie {
         if (attackCooldownTimer <= 0f)
         {
             // Encontra todos os inimigos dentro do alcance de ataque
-            Collider2D[] enemiesInRange = Physics2D.OverlapCircleAll(transform.position, range);
+            Collider2D[] enemiesInRange = Physics2D.OverlapCircleAll(transform.position, attributes.range);
             
             foreach (Collider2D collider in enemiesInRange)
             {
@@ -28,7 +21,7 @@ public class Zomboxer : Zombie {
             }
 
             // Reseta o cooldown de ataque
-            attackCooldownTimer = attackCooldown;
+            attackCooldownTimer = attributes.attackCooldown;
         }
 
         if (timeUntilUpgrade <= 0f)
@@ -54,15 +47,15 @@ public class Zomboxer : Zombie {
 
         if (minhoca != null)
         {
-            minhoca.TakeDamage(damage);
+            minhoca.TakeDamage(attributes.damage);
         }
         else if (larva != null)
         {
-            larva.TakeDamage(damage);
+            larva.TakeDamage(attributes.damage);
         }
         else if (verme != null)
         {
-            verme.TakeDamage(damage);
+            verme.TakeDamage(attributes.damage);
         }
     }
 }

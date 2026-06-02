@@ -5377,22 +5377,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33cd94972cca07c488633baa76d48596, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  custo: 100
-  attackRange: 0.5
-  attackCooldown: 2
-  dano: 20
-  timeUntilUpgrade: 0
-  upgradeTime: 45
-  evolutionEffect: {fileID: 1710705016251243902}
-  currentHealth: 0
-  maxHealth: 50
-  healthBar: {fileID: 0}
+  attributes: {fileID: 11400000, guid: de3baeed6d5407549a916e56f661e857, type: 2}
+  normalSprite: {fileID: 1579187182, guid: a20384c5b2d35bb469207d6f2d27fe6f, type: 3}
+  upgradedZombie: {fileID: -4689406079702324653, guid: 1ddc9afd21fec77489b1248d18f31b68, type: 3}
+  somUpgrade: {fileID: 0}
   somMorte: {fileID: 1357346674580832557, guid: d2f25a79d2d69fe4fb5fc4876edbf185, type: 3}
   somAtaque: {fileID: 3077482021254312367}
-  fadeDuration: 0.5
-  damageFlashDuration: 0.1
-  damageFlashColor: {r: 1, g: 0, b: 0, a: 1}
-  upgradedZombie: {fileID: -4689406079702324653, guid: 1ddc9afd21fec77489b1248d18f31b68, type: 3}
+  evolutionEffect: {fileID: 1710705016251243902}
 --- !u!114 &888579939492588461
 MonoBehaviour:
   m_ObjectHideFlags: 0

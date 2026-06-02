@@ -3,13 +3,6 @@ using UnityEngine;
 using System;
 
 public class Decompoison : Zombie {
-    public override string zombieName { get; protected set; } = "Deadefensive";
-    public override float zombieCost { get; protected set; } = 150f;
-    public override float range { get; protected set; } = 2.5f;
-    public override float attackCooldown { get; protected set; } = 2f;
-    public override float damage { get; protected set; } = 50f;
-    public override float maxHealth { get; protected set; } = 120f;
-
     [SerializeField] private ParticleSystem bombEffect;
 
     protected override void Update() {
@@ -19,7 +12,7 @@ public class Decompoison : Zombie {
         if (attackCooldownTimer <= 0f)
         {
             AttackArea(); // Realiza o ataque em área
-            attackCooldownTimer = attackCooldown;
+            attackCooldownTimer = attributes.attackCooldown;
         }
 
         if (timeUntilUpgrade <= 0f)
@@ -30,7 +23,7 @@ public class Decompoison : Zombie {
 
     void AttackArea()
     {
-        Collider2D[] enemiesInRange = Physics2D.OverlapCircleAll(transform.position, range);
+        Collider2D[] enemiesInRange = Physics2D.OverlapCircleAll(transform.position, attributes.range);
         if (enemiesInRange.Count() > 1)
         {
             bombEffect.Play();
@@ -49,15 +42,15 @@ public class Decompoison : Zombie {
 
                 if (minhoca != null)
                 {
-                    minhoca.TakeDamage(damage);
+                    minhoca.TakeDamage(attributes.damage);
                 }
                 else if (larva != null)
                 {
-                    larva.TakeDamage(damage);
+                    larva.TakeDamage(attributes.damage);
                 }
                 else if (verme != null)
                 {
-                    verme.TakeDamage(damage);
+                    verme.TakeDamage(attributes.damage);
                 }
             }
         }
