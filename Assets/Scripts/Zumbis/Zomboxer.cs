@@ -43,7 +43,7 @@ public class Zomboxer : Zombie {
         Larva larva = target.GetComponent<Larva>();
         Verm verme = target.GetComponent<Verm>();
 
-        somAtaque.Play();
+        attackSFX.Play();
 
         if (minhoca != null)
         {

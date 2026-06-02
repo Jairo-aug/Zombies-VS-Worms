@@ -5326,7 +5326,7 @@ GameObject:
   - component: {fileID: 4060754124935045082}
   - component: {fileID: 5635935600991805224}
   m_Layer: 0
-  m_Name: Torre_04
+  m_Name: Decompoison
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5412,9 +5412,9 @@ MonoBehaviour:
   attributes: {fileID: 11400000, guid: 0bcb4e717e7f7c94099018ac25195acb, type: 2}
   normalSprite: {fileID: 1890619150, guid: 98c9076890156a7429184fef042240bc, type: 3}
   upgradedZombie: {fileID: -4689406079702324653, guid: 1ddc9afd21fec77489b1248d18f31b68, type: 3}
-  somUpgrade: {fileID: 0}
-  somMorte: {fileID: 1357346674580832557, guid: d2f25a79d2d69fe4fb5fc4876edbf185, type: 3}
-  somAtaque: {fileID: 7312902284270419965}
+  upgradeSFX: {fileID: 0}
+  deathSFX: {fileID: 1357346674580832557, guid: d2f25a79d2d69fe4fb5fc4876edbf185, type: 3}
+  attackSFX: {fileID: 7312902284270419965}
   evolutionEffect: {fileID: 6059227984608938108}
   bombEffect: {fileID: 2908695872663446634}
 --- !u!114 &639266311819924230

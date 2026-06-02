@@ -27,7 +27,7 @@ public class Decompoison : Zombie {
         if (enemiesInRange.Count() > 1)
         {
             bombEffect.Play();
-            somAtaque.Play();
+            attackSFX.Play();
         }
 
         foreach (Collider2D collider in enemiesInRange)

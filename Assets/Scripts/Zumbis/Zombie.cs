@@ -14,9 +14,9 @@ public class Zombie : MonoBehaviour {
     [SerializeField] protected Sprite upgradedZombie;
 
     // Efeitos Sonoros
-    [SerializeField] protected AudioSource somUpgrade;
-    [SerializeField] protected AudioSource somMorte;
-    [SerializeField] protected AudioSource somAtaque;
+    [SerializeField] protected AudioSource upgradeSFX;
+    [SerializeField] protected AudioSource deathSFX;
+    [SerializeField] protected AudioSource attackSFX;
     [SerializeField] protected ParticleSystem evolutionEffect;
     public event Action<GameObject> OnTorreMorreu;
 
@@ -30,8 +30,8 @@ public class Zombie : MonoBehaviour {
     protected void Start() {
         animator = GetComponent<Animator>();
         
-        somUpgrade = GetComponent<AudioSource>();
-        somMorte = GetComponent<AudioSource>();
+        upgradeSFX = GetComponent<AudioSource>();
+        deathSFX = GetComponent<AudioSource>();
 
         healthBar = GetComponentInChildren<SliderBar>();
         currentHealth = attributes.maxHealth;
@@ -65,7 +65,7 @@ public class Zombie : MonoBehaviour {
     }
 
     protected void Die() {
-        somMorte.Play();
+        deathSFX.Play();
         StartCoroutine(SumirEDestruir());
     }
 
@@ -134,14 +134,16 @@ public class Zombie : MonoBehaviour {
         }
     }
 
-    protected void UpgradeStatus()
-    {
+    protected void UpgradeStatus() {
         evolutionEffect.Play();
-        somUpgrade.Play();
+        upgradeSFX.Play();
+
         Debug.Log("Deu upgrade no " + attributes.zombieName);
+
         attributes.damage += 10f;
         attributes.maxHealth += 30f;
         currentHealth = attributes.maxHealth;
+        
         healthBar.UpdateSlider(currentHealth);
         timeUntilUpgrade = upgradeTime;
     }
