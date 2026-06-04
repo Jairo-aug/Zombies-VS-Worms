@@ -20,7 +20,7 @@ public class GerenciadorCompras : MonoBehaviour
     private bool torreSelecionada = false; // Controle se uma torre já foi comprada
     private GameObject torreAtual; // Torre atualmente selecionada
     private bool[] torresCompradas; // Array para rastrear se cada torre foi comprada
-    private int[] custosTorres = { 100, 50, 150, 200, 50, 50, 50 }; // Custos das torres
+    private int[] custosTorres = { 100, 50, 150, 200, 50, 50, 50, 0 }; // Custos das torres
 
     public GameObject[] overlaysCinzas; // Array para os overlays cinzas
     public Sprite spriteNegativa;
