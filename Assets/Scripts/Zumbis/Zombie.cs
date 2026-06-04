@@ -5,7 +5,7 @@ using System.Collections;
 public class Zombie : MonoBehaviour {
     public ZombieData attributes;
 
-    protected float attackCooldownTimer;
+    protected float actionCooldownTimer;
     protected Animator animator;
     protected float timeUntilUpgrade, upgradeTime = 45f;
     protected float currentHealth;
@@ -27,7 +27,7 @@ public class Zombie : MonoBehaviour {
     protected SpriteRenderer spriteRenderer;
     protected PilhaDeCarne pilhaDeCarne;
 
-    protected void Start() {
+    protected virtual void Start() {
         animator = GetComponent<Animator>();
         
         upgradeSFX = GetComponent<AudioSource>();
@@ -50,6 +50,7 @@ public class Zombie : MonoBehaviour {
 
     protected virtual void Update() { }
 
+    protected virtual void Attack() { }
     protected virtual void Attack(GameObject target) { }
 
     public void TakeDamage(float damage) {
@@ -61,7 +62,6 @@ public class Zombie : MonoBehaviour {
         if (currentHealth <= 0) {
             Die();
         }
-
     }
 
     protected void Die() {
@@ -149,4 +149,24 @@ public class Zombie : MonoBehaviour {
     }
 
     public void ItemUpgrade() => spriteRenderer.sprite = upgradedZombie;
+
+    protected GameObject FindClosestEnemy() {
+        Collider2D[] enemiesInRange = Physics2D.OverlapCircleAll(transform.position, attributes.range);
+        
+        GameObject closestEnemy = null;
+        float shortestDistance = Mathf.Infinity;
+
+        foreach (Collider2D collider in enemiesInRange) {
+            if (collider.CompareTag("Enemy")) {
+                float distanceToEnemy = Vector2.Distance(transform.position, collider.transform.position);
+                
+                if (distanceToEnemy < shortestDistance) {
+                    shortestDistance = distanceToEnemy;
+                    closestEnemy = collider.gameObject;
+                }
+            }
+        }
+
+        return closestEnemy;
+    }
 }

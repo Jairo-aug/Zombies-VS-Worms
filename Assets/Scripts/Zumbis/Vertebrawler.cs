@@ -8,65 +8,34 @@ public class Vertebrawler : Zombie {
     private bool isUpgrade;
     
     protected override void Update() {
-        attackCooldownTimer -= Time.deltaTime;
+        actionCooldownTimer -= Time.deltaTime;
         timeUntilUpgrade -= Time.deltaTime;
 
-        Collider2D[] enemiesInRange = Physics2D.OverlapCircleAll(transform.position, attributes.range);
-        GameObject closestEnemy = null;
-        float shortestDistance = Mathf.Infinity;
+        GameObject closestEnemy = FindClosestEnemy();
 
-        foreach (Collider2D collider in enemiesInRange)
-        {
-            if (collider.CompareTag("Enemy"))
-            {
-                float distanceToEnemy = Vector2.Distance(transform.position, collider.transform.position);
-                if (distanceToEnemy < shortestDistance)
-                {
-                    shortestDistance = distanceToEnemy;
-                    closestEnemy = collider.gameObject;
-                }
-            }
-        }
-
-        if (closestEnemy != null && attackCooldownTimer <= 0f)
-        {
+        if (closestEnemy != null && actionCooldownTimer <= 0f) {
             Attack(closestEnemy);
-            attackCooldownTimer = attributes.attackCooldown;
+            actionCooldownTimer = attributes.actionTime;
         }
 
-        if (timeUntilUpgrade <= 0f)
-        {
-            UpgradeStatus();
-        }
+        if (timeUntilUpgrade <= 0f) UpgradeStatus();
     }
 
-    protected override void Attack(GameObject target)
-    {
+    protected override void Attack(GameObject target) {
         GameObject projectile = Instantiate(projectilePrefab, transform.position, Quaternion.identity);
-        
-        // Obtenha o script do projétil após a instância
         Projetil projScript = projectile.GetComponent<Projetil>();
         
-        if (projScript != null)
-        {
-            projScript.SetTarget(target);
-        }
-        else
-        {
-            Debug.LogError("Script 'Projetil' não encontrado no prefab do projétil.");
-        }
+        if (projScript != null) projScript.SetTarget(target);
+        
+        else Debug.LogError("Script 'Projetil' não encontrado no prefab do projétil.");
 
-        if(isUpgrade == true)
-        {
-            projScript.UpgradeStatus();       
-        }
+        if(isUpgrade == true) projScript.UpgradeStatus();       
 
         // Ignorar a colisão entre o projétil e o inimigo para evitar interação física
         Collider2D enemyCollider = target.GetComponent<Collider2D>();
         Collider2D projectileCollider = projectile.GetComponent<Collider2D>();
         
-        if (enemyCollider != null && projectileCollider != null)
-        {
+        if (enemyCollider != null && projectileCollider != null) {
             Physics2D.IgnoreCollision(projectileCollider, enemyCollider);
         }
 

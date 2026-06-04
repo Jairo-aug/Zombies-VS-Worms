@@ -5,7 +5,7 @@ public class ZombieData : ScriptableObject {
     public string zombieName;
     public float zombieCost;
     public float range;
-    public float attackCooldown;
+    public float actionTime;
     public float damage;
     public float maxHealth;
 }

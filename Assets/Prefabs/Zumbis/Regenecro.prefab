@@ -5290,7 +5290,7 @@ GameObject:
   m_Component:
   - component: {fileID: 843403683409372356}
   - component: {fileID: 4063820088504135277}
-  - component: {fileID: 5497546320911040003}
+  - component: {fileID: 9152883698459754131}
   - component: {fileID: 888579939492588461}
   - component: {fileID: 6643609975934700360}
   - component: {fileID: 4240861295292479292}
@@ -5365,7 +5365,7 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.5358676, y: 0.5069133}
   m_EdgeRadius: 0
---- !u!114 &5497546320911040003
+--- !u!114 &9152883698459754131
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -5374,9 +5374,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 8122839829293098491}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 33cd94972cca07c488633baa76d48596, type: 3}
+  m_Script: {fileID: 11500000, guid: 800321e869c99ad46a21df227f770640, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier: Assembly-CSharp::Regenecro
   attributes: {fileID: 11400000, guid: d15dbc9c83342134aab9a24189918a07, type: 2}
   normalSprite: {fileID: 21300000, guid: a439df11f9c48b5479c254210ee7d079, type: 3}
   upgradedZombie: {fileID: -4689406079702324653, guid: 1ddc9afd21fec77489b1248d18f31b68, type: 3}
