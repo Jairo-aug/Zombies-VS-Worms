@@ -43,18 +43,19 @@ public class PilhaDeCarne : MonoBehaviour, IHealable {
         AtualizarUI(); // Atualiza a UI após gerar pontos
     }
 
-    // Torna o método público para que ele possa ser acessado de outros scripts
-    public void AtualizarUI()
-    {
-        pontosPodresText.text = "" + pontosPodres;
-    }
+    public void AtualizarUI() => pontosPodresText.text = pontosPodres.ToString();
 
     // Novo método para reduzir pontos
-    public void ReduzirPontos(float quantidade)
-    {
-        pontosPodres -= Mathf.RoundToInt(quantidade); // Reduz a quantidade, arredondando para inteiro
-        if (pontosPodres < 0) pontosPodres = 0; // Garante que os pontos não fiquem negativos
-        AtualizarUI(); // Atualiza a UI após reduzir pontos
+    // Refatorar.
+    public void ReduzirPontos(int quantidade) {
+        pontosPodres -= quantidade; 
+        if (pontosPodres < 0) pontosPodres = 0;
+        AtualizarUI();
+    }
+
+    public void ReceivePointsFromFleshification(int quantity) {
+        pontosPodres += quantity;
+        AtualizarUI();
     }
 
     public void TakeDamage(float damageAmount)
