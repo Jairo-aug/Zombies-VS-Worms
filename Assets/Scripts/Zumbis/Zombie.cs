@@ -2,7 +2,7 @@ using UnityEngine;
 using System;
 using System.Collections;
 
-public class Zombie : MonoBehaviour {
+public class Zombie : MonoBehaviour, IDamageable, IHealable {
     public ZombieData attributes;
 
     protected float actionCooldownTimer;
@@ -10,6 +10,9 @@ public class Zombie : MonoBehaviour {
     protected float timeUntilUpgrade, upgradeTime = 45f;
     protected float currentHealth;
     protected SliderBar healthBar;
+
+    public bool isHealthFull => currentHealth == attributes.maxHealth;
+
     [SerializeField] protected Sprite normalSprite;
     [SerializeField] protected Sprite upgradedZombie;
 
@@ -24,6 +27,8 @@ public class Zombie : MonoBehaviour {
     protected float fadeDuration = 0.5f;
     protected float damageFlashDuration = 0.1f;
     protected Color damageFlashColor = Color.red;
+    protected float healFlashDuration = 0.1f;
+    protected Color healFlashColor = Color.green;
     protected SpriteRenderer spriteRenderer;
     protected PilhaDeCarne pilhaDeCarne;
 
@@ -62,6 +67,17 @@ public class Zombie : MonoBehaviour {
         if (currentHealth <= 0) {
             Die();
         }
+    }
+
+    public void GetHealed(float healAmount) {
+        if (currentHealth + healAmount >= attributes.maxHealth) {
+            currentHealth = attributes.maxHealth;
+        }
+
+        currentHealth += healAmount;
+        healthBar.UpdateSlider(currentHealth);
+
+        StartCoroutine(HealFlashEffect());
     }
 
     protected void Die() {
@@ -128,6 +144,23 @@ public class Zombie : MonoBehaviour {
 
             // Espera o tempo do flash de dano
             yield return new WaitForSeconds(damageFlashDuration);
+
+            // Restaura a cor original
+            spriteRenderer.color = originalColor;
+        }
+    }
+
+    protected IEnumerator HealFlashEffect() {
+        if (spriteRenderer != null)
+        {
+            // Armazena a cor original do zumbi
+            Color originalColor = spriteRenderer.color;
+
+            // Muda a cor para o flash de dano
+            spriteRenderer.color = healFlashColor;
+
+            // Espera o tempo do flash de dano
+            yield return new WaitForSeconds(healFlashDuration);
 
             // Restaura a cor original
             spriteRenderer.color = originalColor;

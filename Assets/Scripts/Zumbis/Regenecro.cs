@@ -3,12 +3,8 @@ using System;
 using System.Collections.Generic;
 
 public class Regenecro : Zombie {
-    private List<GameObject> nearbyZombies;
-    private bool isPileNearby {
-        get {
-            return Vector2.Distance(transform.position, pilhaDeCarne.gameObject.transform.position) <= attributes.range;
-        }
-    }
+    private List<IHealable> nearbyHealables;
+    [SerializeField] private float healAmount = 20f;
 
     protected override void Start() {
         animator = GetComponent<Animator>();
@@ -30,43 +26,43 @@ public class Regenecro : Zombie {
             pilhaDeCarne = pilhaDeCarneObject.GetComponent<PilhaDeCarne>();
         }
 
-        nearbyZombies = new();
+        nearbyHealables = new();
     }
 
     protected override void Update() {
         actionCooldownTimer -= Time.deltaTime;
         timeUntilUpgrade -= Time.deltaTime;
 
-        nearbyZombies = FindNearbyZombies();
-        Debug.Log("Is pile near? " + isPileNearby);
+        nearbyHealables = FindNearbyHealables();
 
-        if (nearbyZombies.Count > 0 && actionCooldownTimer <= 0f) {
-            Heal(nearbyZombies, isPileNearby);
+        if (nearbyHealables.Count > 0 && actionCooldownTimer <= 0f) {
+            foreach (IHealable healable in nearbyHealables) {
+                Heal(healable);
+            }
+            
             actionCooldownTimer = attributes.actionTime;
         }
     }
 
-    private void Heal(List<GameObject> zombiesToHeal, bool shouldHealPile) {
-        // Criar interface IHealable para healar o que deve ser healado.
+    private void Heal(IHealable healable) {
+        if (healable.isHealthFull) return;
+        
+        healable.GetHealed(healAmount);
     }
 
     // Pode ser levado à classe base se houver necessidade em outros zumbis (provável).
-    private List<GameObject> FindNearbyZombies() {
-        List<GameObject> zombies = new();
+    private List<IHealable> FindNearbyHealables() {
+        List<IHealable> healables = new();
 
-        Collider2D[] zombiesCollidersFound = Physics2D.OverlapCircleAll(transform.position, attributes.range);
-
+        Collider2D[] collidersFound = Physics2D.OverlapCircleAll(transform.position, attributes.range);
         
-        
-        foreach(Collider2D c in zombiesCollidersFound) {
+        foreach(Collider2D c in collidersFound) {
             if (c.gameObject == gameObject) continue;
-            if (!c.gameObject.TryGetComponent<Zombie>(out Zombie z)) continue;
+            if (!c.gameObject.TryGetComponent<IHealable>(out IHealable h)) continue;
             
-            zombies.Add(z.gameObject);
-
-            Debug.Log("Found a zombie " + z.gameObject.GetComponent<Zombie>().attributes.name);
+            healables.Add(h);
         }
 
-        return zombies;
+        return healables;
     }
 }

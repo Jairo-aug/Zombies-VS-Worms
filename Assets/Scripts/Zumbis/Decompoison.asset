@@ -15,6 +15,6 @@ MonoBehaviour:
   zombieName: Decompoison
   zombieCost: 150
   range: 2.5
-  attackCooldown: 2
+  actionTime: 5
   damage: 20
   maxHealth: 120

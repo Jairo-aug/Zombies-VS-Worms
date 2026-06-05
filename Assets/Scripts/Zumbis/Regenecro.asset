@@ -15,6 +15,6 @@ MonoBehaviour:
   zombieName: Regenecro
   zombieCost: 200
   range: 15
-  attackCooldown: 20
+  actionTime: 20
   damage: 0
   maxHealth: 200

@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Enemy : MonoBehaviour {
+public class Enemy : MonoBehaviour, IDamageable {
     protected Transform target; // O alvo a ser perseguido (a Pilha de Carne)
     protected float currentSpeed;
     public Rigidbody2D enemyRb;
@@ -126,7 +126,7 @@ public class Enemy : MonoBehaviour {
         z.TakeDamage(attackDamage);
     }
 
-    public virtual void TakeDamage(float damage) {
+    public void TakeDamage(float damage) {
         currentHealth -= damage; // Reduz a vida atual
 
         // Atualiza a barra de vida

@@ -6,8 +6,9 @@ using System.Collections;
 // Relativamente independente.
 // Única dependência é a classe HealthBar;
 // REFATORÁVEL.
-public class PilhaDeCarne : MonoBehaviour
-{
+public class PilhaDeCarne : MonoBehaviour, IHealable {
+    public bool isHealthFull => health == maxHealth;
+
     public int pontosPodres = 0; // Pontos disponíveis, inicializando com 0
     public TextMeshProUGUI pontosPodresText; // Referência ao texto na UI para exibir os pontos
     public float pontosPorSegundo = 40f; // Quantidade de pontos gerados por segundo
@@ -18,7 +19,8 @@ public class PilhaDeCarne : MonoBehaviour
 
     private float tempoUpdate;
     private SpriteRenderer spriteRenderer; // Referência ao SpriteRenderer para a cor
-    [SerializeField] private Color damageColor = Color.red; // Cor para o efeito de dano
+    [SerializeField] private Color damageColor = Color.red;
+    [SerializeField] private Color healColor = Color.green; 
     private Color originalColor; // Cor original
 
     private void Start() {
@@ -63,16 +65,33 @@ public class PilhaDeCarne : MonoBehaviour
         // Adiciona o efeito visual de dano
         StartCoroutine(DamageEffect());
 
-        if (health <= 0)
-        {
-            Die();
-        }
+        if (health <= 0) Die();
     }
 
-    private IEnumerator DamageEffect()
-    {
+    public void GetHealed(float healAmount) {
+        if (health + healAmount >= maxHealth) {
+            health = maxHealth;
+        }
+
+        health += healAmount;
+        playerHealthBar.UpdateSlider(health);
+
+        StartCoroutine(HealEffect());
+    }
+
+    private IEnumerator DamageEffect() {
         // Muda a cor para o efeito de dano
         spriteRenderer.color = damageColor;
+
+        // Espera 0.1 segundos e volta para a cor original
+        yield return new WaitForSeconds(0.1f);
+
+        spriteRenderer.color = originalColor;
+    }
+
+    private IEnumerator HealEffect() {
+        // Muda a cor para o efeito de dano
+        spriteRenderer.color = healColor;
 
         // Espera 0.1 segundos e volta para a cor original
         yield return new WaitForSeconds(0.1f);
