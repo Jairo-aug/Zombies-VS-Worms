@@ -19,11 +19,8 @@ public class Regenecro : Zombie {
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         spriteRenderer.sprite = normalSprite;
 
-        GameObject pilhaDeCarneObject = GameObject.FindGameObjectWithTag("PilhaDeCarne");
-
-        if (pilhaDeCarneObject != null) {
-            pilhaDeCarne = pilhaDeCarneObject.GetComponent<PilhaDeCarne>();
-        }
+        GameObject fleshStackObject = GameObject.FindGameObjectWithTag("PilhaDeCarne");
+        fleshStack = fleshStackObject.GetComponent<FleshStack>();
 
         nearbyHealables = new();
     }

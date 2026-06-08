@@ -22,7 +22,7 @@ public class Enemy : MonoBehaviour, IDamageable {
     [SerializeField] protected Sprite placeholderItemDrop;
 
     
-    protected PilhaDeCarne pileOfFlesh; // Referência à Pilha de Carne
+    protected FleshStack pileOfFlesh; // Referência à Pilha de Carne
     protected bool isTouchingPileOfFlesh = false; // Verifica se está tocando a Pilha de Carne
     protected Collider2D isTouchingTower; // Verifica se está tocando a Pilha de Carne
     protected float timeSinceLastHit; // Tempo desde a última aplicação de dano
@@ -45,7 +45,7 @@ public class Enemy : MonoBehaviour, IDamageable {
     protected virtual void Start() {
         // Encontra o objeto chamado "Pilha de Carne" na cena e define o alvo
         
-        TargetIspileOfFlesh();
+        TargetIsFleshStack();
     
         currentHealth = maximumHealth;
         
@@ -115,7 +115,7 @@ public class Enemy : MonoBehaviour, IDamageable {
 
         else if (collider.CompareTag("Player")) {
             isTouchingTower = null;
-            TargetIspileOfFlesh();
+            TargetIsFleshStack();
             currentSpeed = maximumSpeed;    
             enemyRb.isKinematic = false;
         }
@@ -172,7 +172,7 @@ public class Enemy : MonoBehaviour, IDamageable {
     protected void Die() {
         // Gerar experiência e pontos
         ExperienceManager.Instance.AddExperience(expAmount);
-        pileOfFlesh.GerarPontos(expAmount);
+        pileOfFlesh.ModifyPointQuantity(expAmount);
 
         StartCoroutine(SumirEDestruir());
 
@@ -188,12 +188,12 @@ public class Enemy : MonoBehaviour, IDamageable {
         apple.InstantiateItem(placeholderItemDrop, transform.position);
     }
 
-    protected virtual void TargetIspileOfFlesh() {
+    protected virtual void TargetIsFleshStack() {
         GameObject pileOfFleshObject = GameObject.FindGameObjectWithTag("PilhaDeCarne");
-        if (pileOfFleshObject != null) {
-            target = pileOfFleshObject.transform;
-            pileOfFlesh = pileOfFleshObject.GetComponent<PilhaDeCarne>(); // Obtém o script da Pilha de Carne
-        }
+        
+        
+        target = pileOfFleshObject.transform;
+        pileOfFlesh = pileOfFleshObject.GetComponent<FleshStack>();
     }
 
     public void levelUp() {

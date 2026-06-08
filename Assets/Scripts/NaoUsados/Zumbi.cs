@@ -6,20 +6,20 @@ public class Zumbi : MonoBehaviour
     [SerializeField] private float fadeDuration = 0.5f; // Duração do fade-out
     [SerializeField] private float damageFlashDuration = 0.1f; // Duração do flash de dano
     [SerializeField] private Color damageFlashColor = Color.red; // Cor do flash de dano
-    private PilhaDeCarne pilhaDeCarne; // Referência à Pilha de Carne
+    private FleshStack fleshStack; // Referência à Pilha de Carne
     private SpriteRenderer spriteRenderer; // Referência ao SpriteRenderer do zumbi
 
     void Start()
     {
-        // Obtém a referência ao objeto PilhaDeCarne usando a tag
-        GameObject pilhaDeCarneObject = GameObject.FindGameObjectWithTag("PilhaDeCarne");
-        if (pilhaDeCarneObject != null)
+        // Obtém a referência ao objeto FleshStack usando a tag
+        GameObject fleshStackObject = GameObject.FindGameObjectWithTag("FleshStack");
+        if (fleshStackObject != null)
         {
-            pilhaDeCarne = pilhaDeCarneObject.GetComponent<PilhaDeCarne>();
+            fleshStack = fleshStackObject.GetComponent<FleshStack>();
         }
         else
         {
-            Debug.LogWarning("PilhaDeCarne não encontrada. Certifique-se de que o objeto tem a tag 'PilhaDeCarne'.");
+            Debug.LogWarning("FleshStack não encontrada. Certifique-se de que o objeto tem a tag 'FleshStack'.");
         }
 
         // Busca o SpriteRenderer nos filhos do zumbi (não apenas no objeto principal)
@@ -48,13 +48,13 @@ public class Zumbi : MonoBehaviour
         int pontosRecuperados = Mathf.FloorToInt(custoZumbi / 2.0f);
 
         // Recupera os pontos na Pilha de Carne
-        if (pilhaDeCarne != null)
+        if (fleshStack != null)
         {
-            pilhaDeCarne.GerarPontos(pontosRecuperados);
+            fleshStack.ModifyPointQuantity(pontosRecuperados);
         }
         else
         {
-            Debug.LogWarning("PilhaDeCarne não foi atribuída. Pontos não foram recuperados.");
+            Debug.LogWarning("FleshStack não foi atribuída. Pontos não foram recuperados.");
         }
 
         // Inicia o fade-out antes de destruir o objeto

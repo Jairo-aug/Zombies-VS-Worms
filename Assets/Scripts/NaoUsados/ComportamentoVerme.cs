@@ -15,8 +15,8 @@ public class ComportamentoVerme : MonoBehaviour
     
     int expAmount = 25;
 
-    private PilhaDeCarne pilhaDeCarne;
-    private bool isTouchingPilhaDeCarne = false;
+    private FleshStack fleshStack;
+    private bool isTouchingFleshStack = false;
     private Collider2D isTouchingTorre; // Verifica se está tocando a Pilha de Carne
     
     private float tempoDesdeUltimoDano;
@@ -31,7 +31,7 @@ public class ComportamentoVerme : MonoBehaviour
 
     void Start()
     {
-        TargetIsPilhaDeCarne();
+        TargetIsFleshStack();
         currentHealth = maxHealth;
         currentSpeed = maxSpeed;
 
@@ -45,17 +45,17 @@ public class ComportamentoVerme : MonoBehaviour
     {
         tempoDesdeUltimoDano += Time.deltaTime;
 
-        if (target != null && !isTouchingPilhaDeCarne)
+        if (target != null && !isTouchingFleshStack)
         {
             Vector2 direction = (target.position - transform.position).normalized;
             transform.position = Vector2.MoveTowards(transform.position, target.position, currentSpeed * Time.deltaTime);
         }
 
-        if (isTouchingPilhaDeCarne && pilhaDeCarne != null)
+        if (isTouchingFleshStack && fleshStack != null)
         {
             if (tempoDesdeUltimoDano >= intervaloDano)
             {
-                pilhaDeCarne.TakeDamage(danoAtaque);
+                fleshStack.TakeDamage(danoAtaque);
                 tempoDesdeUltimoDano = 0f;
             }
         }
@@ -72,9 +72,9 @@ public class ComportamentoVerme : MonoBehaviour
 
     public void OnTriggerEnter2D(Collider2D collider)
     {
-        if (collider.CompareTag("PilhaDeCarne"))
+        if (collider.CompareTag("FleshStack"))
         {
-            isTouchingPilhaDeCarne = true;
+            isTouchingFleshStack = true;
             currentSpeed = 0;
         }
 
@@ -90,16 +90,16 @@ public class ComportamentoVerme : MonoBehaviour
 
     public void OnTriggerExit2D(Collider2D collider)
     {
-        if (collider.CompareTag("PilhaDeCarne"))
+        if (collider.CompareTag("FleshStack"))
         {
-            isTouchingPilhaDeCarne = false;
+            isTouchingFleshStack = false;
             currentSpeed = maxSpeed;
         }
 
         else if (collider.CompareTag("Player"))
         {
             isTouchingTorre = null;
-            TargetIsPilhaDeCarne();
+            TargetIsFleshStack();
             currentSpeed = maxSpeed;    
             enemyRb.isKinematic = false;
         }
@@ -122,17 +122,17 @@ public class ComportamentoVerme : MonoBehaviour
     void Die()
     {
         ExperienceManager.Instance.AddExperience(10);
-        pilhaDeCarne.GerarPontos(expAmount);
+        fleshStack.ModifyPointQuantity(expAmount);
         Destroy(gameObject);
     }
 
-    void TargetIsPilhaDeCarne()
+    void TargetIsFleshStack()
     {
-        GameObject pilhaDeCarneObject = GameObject.FindGameObjectWithTag("PilhaDeCarne");
-        if (pilhaDeCarneObject != null)
+        GameObject fleshStackObject = GameObject.FindGameObjectWithTag("FleshStack");
+        if (fleshStackObject != null)
         {
-            target = pilhaDeCarneObject.transform;
-            pilhaDeCarne = pilhaDeCarneObject.GetComponent<PilhaDeCarne>();
+            target = fleshStackObject.transform;
+            fleshStack = fleshStackObject.GetComponent<FleshStack>();
         }
     }
 

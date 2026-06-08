@@ -6,18 +6,18 @@ using System.Collections;
 // Relativamente independente.
 // Única dependência é a classe HealthBar;
 // REFATORÁVEL.
-public class PilhaDeCarne : MonoBehaviour, IHealable {
+public class FleshStack : MonoBehaviour, IHealable {
     public bool isHealthFull => health == maxHealth;
 
-    public float pontosPodres = 0; // Pontos disponíveis, inicializando com 0
-    public TextMeshProUGUI pontosPodresText; // Referência ao texto na UI para exibir os pontos
-    public float pontosPorSegundo = 40f; // Quantidade de pontos gerados por segundo
+    public float rottenPoints = 0; // Pontos disponíveis, inicializando com 0
+    public TextMeshProUGUI rottenPointsText; // Referência ao texto na UI para exibir os pontos
+    public float pointsPerSecond = 40f; // Quantidade de pontos gerados por segundo
 
     [SerializeField] float maxHealth = 80f;
     private float health;
     [SerializeField] SliderBar playerHealthBar;
 
-    private float tempoUpdate;
+    private float updateTimer;
     private SpriteRenderer spriteRenderer; // Referência ao SpriteRenderer para a cor
     [SerializeField] private Color damageColor = Color.red;
     [SerializeField] private Color healColor = Color.green; 
@@ -26,52 +26,31 @@ public class PilhaDeCarne : MonoBehaviour, IHealable {
     private void Start() {
         // Inicia a geração automática de pontos a cada segundo
         health = maxHealth;
-        pontosPodres = 300;
-        AtualizarUI(); // Atualiza a UI quando o jogo começa
+        rottenPoints = 150;
+        
+        UpdateDisplay(); // Atualiza a UI quando o jogo começa
         playerHealthBar.Set(maxHealth, health); // Atualiza a UI de vida desde o início
         
         spriteRenderer = GetComponent<SpriteRenderer>(); // Pegando a referência ao SpriteRenderer
         originalColor = spriteRenderer.color; // Armazena a cor original do sprite
     
-        // Dá pra organizar o código melhor.
-        // Unificar tudo em um método.
-        FleshDrop.OnFleshClicked += (float fleshificationAmount) => {
-            pontosPodres += fleshificationAmount;
-
-            AtualizarUI();
+        FleshDrop.OnFleshClicked += (int fleshificationAmount) => {
+            ModifyPointQuantity(fleshificationAmount);
         };
     }
 
-    // Método para gerar pontos por segundo
-    public void GerarPontos(int pontosGanhos)
-    {
-        pontosPodres += pontosGanhos;
-        if (pontosPodres > 300)
-            pontosPodres = 300;
-        AtualizarUI(); // Atualiza a UI após gerar pontos
+    public void ModifyPointQuantity(int quantity) {
+        rottenPoints += quantity;
+
+        UpdateDisplay();
     }
 
-    public void AtualizarUI() => pontosPodresText.text = pontosPodres.ToString();
+    public void UpdateDisplay() => rottenPointsText.text = rottenPoints.ToString();
 
-    // Novo método para reduzir pontos
-    // Refatorar.
-    public void ReduzirPontos(int quantidade) {
-        pontosPodres -= quantidade; 
-        if (pontosPodres < 0) pontosPodres = 0;
-        AtualizarUI();
-    }
-
-    public void ReceivePointsFromFleshification(float quantity) {
-        pontosPodres += quantity;
-        AtualizarUI();
-    }
-
-    public void TakeDamage(float damageAmount)
-    {
+    public void TakeDamage(float damageAmount) {
         health -= damageAmount;
         playerHealthBar.UpdateSlider(health);
         
-        // Adiciona o efeito visual de dano
         StartCoroutine(DamageEffect());
 
         if (health <= 0) Die();
@@ -108,8 +87,7 @@ public class PilhaDeCarne : MonoBehaviour, IHealable {
         spriteRenderer.color = originalColor;
     }
 
-    void Die()
-    {
+    void Die() {
         Destroy(gameObject);
         SceneManager.LoadScene("Derrota");
     }

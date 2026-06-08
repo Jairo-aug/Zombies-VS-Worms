@@ -9,5 +9,5 @@ public class ZombieData : ScriptableObject {
     public float damage;
     public float maxHealth;
     public float healAmount;
-    public float fleshificationAmount;
+    public int fleshificationAmount;
 }

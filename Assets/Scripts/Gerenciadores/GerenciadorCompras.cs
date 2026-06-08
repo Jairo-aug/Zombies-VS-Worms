@@ -25,7 +25,7 @@ public class GerenciadorCompras : MonoBehaviour
     public GameObject[] overlaysCinzas; // Array para os overlays cinzas
     public Sprite spriteNegativa;
 
-    private PilhaDeCarne pilhaDeCarne; // Referência ao script que gerencia os pontos
+    private FleshStack fleshStack; // Referência ao script que gerencia os pontos
     private SpriteRenderer cursorRenderer;
     private Sprite torreSprite;
 
@@ -52,8 +52,8 @@ public class GerenciadorCompras : MonoBehaviour
         imagemIndicacaoZumbi.SetActive(false);
         imagemIndicacaoArmadilha.SetActive(false);
 
-        // Obtém a referência ao script PilhaDeCarne
-        pilhaDeCarne = FindObjectOfType<PilhaDeCarne>();
+        // Obtém a referência ao script FleshStack
+        fleshStack = FindObjectOfType<FleshStack>();
     }
 
     private void UpdateListaTorres(GameObject torre)
@@ -81,7 +81,7 @@ public class GerenciadorCompras : MonoBehaviour
     void AtualizarUI()
     {
         if (botoes == null || botoes.Length == 0) return;
-        if (pilhaDeCarne == null) return;
+        if (fleshStack == null) return;
 
         for (int i = 0; i < botoes.Length; i++)
         {
@@ -90,7 +90,7 @@ public class GerenciadorCompras : MonoBehaviour
             // Animator animator = botoes[i].GetComponent<Animator>();
             // if (animator == null) continue;
 
-            bool pontosSuficientes = pilhaDeCarne.pontosPodres >= custosTorres[i];
+            bool pontosSuficientes = fleshStack.rottenPoints >= custosTorres[i];
 
             // Se pontos são suficientes, o botão começa a pulsar
             // animator.enabled = pontosSuficientes;
@@ -110,9 +110,9 @@ public class GerenciadorCompras : MonoBehaviour
             int custo = custosTorres[idTorre];
 
             // Verifica se o jogador tem pontos suficientes
-            if (pilhaDeCarne.pontosPodres < custo)
+            if (fleshStack.rottenPoints < custo)
             {
-                Debug.Log("PontosPodres insuficientes para comprar esta torre!");
+                Debug.Log("rottenPoints insuficientes para comprar esta torre!");
                 return;
             }
 
@@ -124,7 +124,7 @@ public class GerenciadorCompras : MonoBehaviour
             }
 
             // Deduz os pontos e configura o cursor
-            pilhaDeCarne.ReduzirPontos(custo);
+            fleshStack.ModifyPointQuantity(-custo);
             torreSelecionada = true;
             torreAtual = prefabsTorres[idTorre];
 

@@ -4439,12 +4439,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74b26f9df9af15442b125ef2b65dfda7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pontosPodres: 100
-  pontosPodresText: {fileID: 1743172032}
-  pontosPorSegundo: 30
+  rottenPoints: 150
+  rottenPointsText: {fileID: 1743172032}
+  pointsPerSecond: 40
   maxHealth: 800
   playerHealthBar: {fileID: 1642878485}
   damageColor: {r: 1, g: 0, b: 0, a: 1}
+  healColor: {r: 0, g: 1, b: 0, a: 1}
 --- !u!61 &299758925
 BoxCollider2D:
   m_ObjectHideFlags: 0

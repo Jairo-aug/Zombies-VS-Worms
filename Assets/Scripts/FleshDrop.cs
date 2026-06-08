@@ -4,9 +4,9 @@ using UnityEngine;
 public class FleshDrop : MonoBehaviour, IClickable {
     private SpriteRenderer spriteRenderer;
     private BoxCollider2D boxCollider;
-    public float rottenPointsAmount;
+    public int rottenPointsAmount;
 
-    public static event Action<float> OnFleshClicked;
+    public static event Action<int> OnFleshClicked;
 
     public void OnClicked() {
         OnFleshClicked?.Invoke(rottenPointsAmount);

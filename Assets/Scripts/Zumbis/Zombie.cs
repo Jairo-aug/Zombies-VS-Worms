@@ -31,7 +31,7 @@ public class Zombie : MonoBehaviour, IDamageable, IHealable {
     protected float healFlashDuration = 0.1f;
     protected Color healFlashColor = Color.green;
     protected SpriteRenderer spriteRenderer;
-    protected PilhaDeCarne pilhaDeCarne;
+    protected FleshStack fleshStack;
 
     protected virtual void Start() {
         animator = GetComponent<Animator>();
@@ -47,11 +47,8 @@ public class Zombie : MonoBehaviour, IDamageable, IHealable {
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         spriteRenderer.sprite = normalSprite;
 
-        GameObject pilhaDeCarneObject = GameObject.FindGameObjectWithTag("PilhaDeCarne");
-
-        if (pilhaDeCarneObject != null) {
-            pilhaDeCarne = pilhaDeCarneObject.GetComponent<PilhaDeCarne>();
-        }
+        GameObject fleshStackObject = GameObject.FindGameObjectWithTag("PilhaDeCarne");
+        fleshStack = fleshStackObject.GetComponent<FleshStack>();
     }
 
     protected virtual void Update() { }
@@ -81,12 +78,7 @@ public class Zombie : MonoBehaviour, IDamageable, IHealable {
         StartCoroutine(HealFlashEffect());
     }
 
-    // Carnificar -> carnificação.
-    protected void Fleshificate() {
-        pilhaDeCarne.ReceivePointsFromFleshification(attributes.fleshificationAmount);
-        
-        DropFleshFromFleshification();
-    }
+    protected void Fleshificate() => DropFleshFromFleshification();
 
     private void DropFleshFromFleshification() {
         GameObject fleshDrop = new GameObject("Piece of Flesh");
@@ -98,89 +90,67 @@ public class Zombie : MonoBehaviour, IDamageable, IHealable {
 
     protected void Die() {
         deathSFX.Play();
-        StartCoroutine(SumirEDestruir());
+        StartCoroutine(DisappearEffect());
     }
 
     protected void OnMouseOver()
     {
         if (Input.GetMouseButtonDown(1)) {
-            DestruirZumbi();
+            DestroyZombie();
         }
     }
 
-    protected void DestruirZumbi()
-    {
-        // Calcula a metade do custo
-        int pontosRecuperados = Mathf.FloorToInt(attributes.zombieCost / 2.0f);
+    protected void DestroyZombie() {
+        int pointsRecovered = Mathf.FloorToInt(attributes.zombieCost / 2);
 
-        // Recupera os pontos na Pilha de Carne
-        if (pilhaDeCarne != null)
-        {
-            pilhaDeCarne.GerarPontos(pontosRecuperados);
-        }
-        else
-        {
-            Debug.LogWarning("PilhaDeCarne não foi atribuída. Pontos não foram recuperados.");
-        }
-
-        // Inicia o fade-out antes de destruir o objeto
-        StartCoroutine(SumirEDestruir());
+        fleshStack.ModifyPointQuantity(pointsRecovered);
+        
+        StartCoroutine(DisappearEffect());
     }
 
     // Modificações Visuais
+    protected IEnumerator DisappearEffect() {
+        Color originalColor = spriteRenderer.color;
+        
+        float elapsedTime = 0f;
 
-    protected IEnumerator SumirEDestruir() {
-        if (spriteRenderer != null)
-        {
-            Color originalColor = spriteRenderer.color;
-            float elapsedTime = 0f;
-
-            while (elapsedTime < fadeDuration)
-            {
-                elapsedTime += Time.deltaTime;
-                float alpha = Mathf.Lerp(1f, 0f, elapsedTime / fadeDuration);
-                spriteRenderer.color = new Color(originalColor.r, originalColor.g, originalColor.b, alpha);
-                yield return null;
-            }
+        while (elapsedTime < fadeDuration){
+            elapsedTime += Time.deltaTime;
+            float alpha = Mathf.Lerp(1f, 0f, elapsedTime / fadeDuration);
+            spriteRenderer.color = new Color(originalColor.r, originalColor.g, originalColor.b, alpha);
+            yield return null;
         }
-
-        // Destroi o objeto após o fade-out
+        
         OnTorreMorreu?.Invoke(gameObject);
         Destroy(gameObject);
     }
 
     protected IEnumerator DamageFlashEffect() {
-        if (spriteRenderer != null)
-        {
-            // Armazena a cor original do zumbi
-            Color originalColor = spriteRenderer.color;
+        // Armazena a cor original do zumbi
+        Color originalColor = spriteRenderer.color;
 
-            // Muda a cor para o flash de dano
-            spriteRenderer.color = damageFlashColor;
+        // Muda a cor para o flash de dano
+        spriteRenderer.color = damageFlashColor;
 
-            // Espera o tempo do flash de dano
-            yield return new WaitForSeconds(damageFlashDuration);
+        // Espera o tempo do flash de dano
+        yield return new WaitForSeconds(damageFlashDuration);
 
-            // Restaura a cor original
-            spriteRenderer.color = originalColor;
-        }
+        // Restaura a cor original
+        spriteRenderer.color = originalColor;
     }
 
     protected IEnumerator HealFlashEffect() {
-        if (spriteRenderer != null)
-        {
-            // Armazena a cor original do zumbi
-            Color originalColor = spriteRenderer.color;
+        // Armazena a cor original do zumbi
+        Color originalColor = spriteRenderer.color;
 
-            // Muda a cor para o flash de dano
-            spriteRenderer.color = healFlashColor;
+        // Muda a cor para o flash de dano
+        spriteRenderer.color = healFlashColor;
 
-            // Espera o tempo do flash de dano
-            yield return new WaitForSeconds(healFlashDuration);
+        // Espera o tempo do flash de dano
+        yield return new WaitForSeconds(healFlashDuration);
 
-            // Restaura a cor original
-            spriteRenderer.color = originalColor;
-        }
+        // Restaura a cor original
+        spriteRenderer.color = originalColor;
     }
 
     protected void UpgradeStatus() {
