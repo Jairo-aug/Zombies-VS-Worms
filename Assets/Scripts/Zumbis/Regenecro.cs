@@ -4,8 +4,6 @@ using System.Collections.Generic;
 
 public class Regenecro : Zombie {
     private List<IHealable> nearbyHealables;
-    [SerializeField] private int healAmount = 20;
-    [SerializeField] private int carnificationAmount = 20;
 
     protected override void Start() {
         animator = GetComponent<Animator>();
@@ -36,13 +34,15 @@ public class Regenecro : Zombie {
 
         nearbyHealables = FindNearbyHealables();
 
-        if (nearbyHealables.Count > 0 && actionCooldownTimer <= 0f) {
-            foreach (IHealable healable in nearbyHealables) {
-                Heal(healable);
+        if (actionCooldownTimer <= 0f) {
+            Fleshificate();
+
+            if (nearbyHealables.Count > 0) {
+                foreach (IHealable healable in nearbyHealables) {
+                    Heal(healable);
+                }
             }
 
-            Fleshificate();
-            
             actionCooldownTimer = attributes.actionTime;
         }
     }
@@ -50,13 +50,7 @@ public class Regenecro : Zombie {
     private void Heal(IHealable healable) {
         if (healable.isHealthFull) return;
         
-        healable.GetHealed(healAmount);
-    }
-
-    // Carnificar -> carnificação.
-    private void Fleshificate() {
-        pilhaDeCarne.ReceivePointsFromFleshification(carnificationAmount);
-        Debug.Log("Carnificação! +20!");
+        healable.GetHealed(attributes.healAmount);
     }
 
     // Pode ser levado à classe base se houver necessidade em outros zumbis (provável).

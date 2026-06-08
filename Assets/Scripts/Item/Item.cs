@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Item : MonoBehaviour {
+public class Item : MonoBehaviour, IClickable {
     // ATRIBUTOS
     // Pode ser substituido por um scriptable object.
     protected virtual string itemName { get; set; }
@@ -8,15 +8,16 @@ public class Item : MonoBehaviour {
     protected SpriteRenderer spriteRenderer;
     protected ItemState currentState;
     protected BoxCollider2D boxCollider;
+    public Inventory targetInventory;
     
-    public void OnClicked(Inventory inventory) {
+    public void OnClicked() {
         switch(currentState) {
             case ItemState.OnGround:
-                Collect(inventory);
+                Collect(targetInventory);
                 break;
             
             case ItemState.InInventory:
-                Drag(inventory);
+                Drag(targetInventory);
                 break;
 
             default: return;
@@ -33,6 +34,8 @@ public class Item : MonoBehaviour {
         boxCollider = gameObject.AddComponent<BoxCollider2D>();
         boxCollider.isTrigger = true;
 
+        spriteRenderer.sortingLayerName = "Drops";
+
         currentState = ItemState.OnGround;
     }
 
@@ -47,12 +50,14 @@ public class Item : MonoBehaviour {
 
         inventory.DragItem();
     }
+
     public void Place(GameObject placedOnZombie) {
         currentState = ItemState.InUse;
 
         Zombie z = placedOnZombie.GetComponent<Zombie>();
-        z.ItemUpgrade();
+        z.UpgradeFromItem();
     }
+    
     protected enum ItemState {
         OnGround,
         InInventory,

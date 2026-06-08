@@ -14,7 +14,8 @@ public class Zombie : MonoBehaviour, IDamageable, IHealable {
     public bool isHealthFull => currentHealth == attributes.maxHealth;
 
     [SerializeField] protected Sprite normalSprite;
-    [SerializeField] protected Sprite upgradedZombie;
+    [SerializeField] protected Sprite fleshificationDropSprite;
+    [SerializeField] protected Sprite upgradedZombie; // Temporário
 
     // Efeitos Sonoros
     [SerializeField] protected AudioSource upgradeSFX;
@@ -78,6 +79,21 @@ public class Zombie : MonoBehaviour, IDamageable, IHealable {
         healthBar.UpdateSlider(currentHealth);
 
         StartCoroutine(HealFlashEffect());
+    }
+
+    // Carnificar -> carnificação.
+    protected void Fleshificate() {
+        pilhaDeCarne.ReceivePointsFromFleshification(attributes.fleshificationAmount);
+        
+        DropFleshFromFleshification();
+    }
+
+    private void DropFleshFromFleshification() {
+        GameObject fleshDrop = new GameObject("Piece of Flesh");
+            
+        FleshDrop fleshComponent = fleshDrop.AddComponent<FleshDrop>();
+        fleshComponent.rottenPointsAmount = attributes.fleshificationAmount;
+        fleshComponent.InstantiateDrop(fleshificationDropSprite, transform.position);
     }
 
     protected void Die() {
@@ -181,7 +197,8 @@ public class Zombie : MonoBehaviour, IDamageable, IHealable {
         timeUntilUpgrade = upgradeTime;
     }
 
-    public void ItemUpgrade() => spriteRenderer.sprite = upgradedZombie;
+    // Forma simples temporária.
+    public void UpgradeFromItem() => spriteRenderer.sprite = upgradedZombie;
 
     protected GameObject FindClosestEnemy() {
         Collider2D[] enemiesInRange = Physics2D.OverlapCircleAll(transform.position, attributes.range);

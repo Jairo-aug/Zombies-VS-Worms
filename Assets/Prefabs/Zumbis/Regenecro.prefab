@@ -5379,6 +5379,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Regenecro
   attributes: {fileID: 11400000, guid: d15dbc9c83342134aab9a24189918a07, type: 2}
   normalSprite: {fileID: 21300000, guid: a439df11f9c48b5479c254210ee7d079, type: 3}
+  fleshificationDropSprite: {fileID: 21300000, guid: 820da72c4a0088d4299770515f6175c7, type: 3}
   upgradedZombie: {fileID: -4689406079702324653, guid: 1ddc9afd21fec77489b1248d18f31b68, type: 3}
   upgradeSFX: {fileID: 0}
   deathSFX: {fileID: 1357346674580832557, guid: d2f25a79d2d69fe4fb5fc4876edbf185, type: 3}

@@ -9,7 +9,7 @@ using System.Collections;
 public class PilhaDeCarne : MonoBehaviour, IHealable {
     public bool isHealthFull => health == maxHealth;
 
-    public int pontosPodres = 0; // Pontos disponíveis, inicializando com 0
+    public float pontosPodres = 0; // Pontos disponíveis, inicializando com 0
     public TextMeshProUGUI pontosPodresText; // Referência ao texto na UI para exibir os pontos
     public float pontosPorSegundo = 40f; // Quantidade de pontos gerados por segundo
 
@@ -32,6 +32,14 @@ public class PilhaDeCarne : MonoBehaviour, IHealable {
         
         spriteRenderer = GetComponent<SpriteRenderer>(); // Pegando a referência ao SpriteRenderer
         originalColor = spriteRenderer.color; // Armazena a cor original do sprite
+    
+        // Dá pra organizar o código melhor.
+        // Unificar tudo em um método.
+        FleshDrop.OnFleshClicked += (float fleshificationAmount) => {
+            pontosPodres += fleshificationAmount;
+
+            AtualizarUI();
+        };
     }
 
     // Método para gerar pontos por segundo
@@ -53,7 +61,7 @@ public class PilhaDeCarne : MonoBehaviour, IHealable {
         AtualizarUI();
     }
 
-    public void ReceivePointsFromFleshification(int quantity) {
+    public void ReceivePointsFromFleshification(float quantity) {
         pontosPodres += quantity;
         AtualizarUI();
     }

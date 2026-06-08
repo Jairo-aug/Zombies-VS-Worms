@@ -177,11 +177,15 @@ public class Enemy : MonoBehaviour, IDamageable {
         StartCoroutine(SumirEDestruir());
 
         if (WillDropAnItem()) {
-            GameObject item = new GameObject("Crazy Apple");
-            
-            Apple apple = item.AddComponent<Apple>();
-            apple.InstantiateItem(placeholderItemDrop, transform.position);
+            DropItem();
         }
+    }
+
+    private void DropItem() {
+        GameObject itemDrop = new GameObject("Crazy Apple");
+            
+        Apple apple = itemDrop.AddComponent<Apple>();
+        apple.InstantiateItem(placeholderItemDrop, transform.position);
     }
 
     protected virtual void TargetIspileOfFlesh() {
@@ -200,8 +204,6 @@ public class Enemy : MonoBehaviour, IDamageable {
     protected bool WillDropAnItem() {
         System.Random r = new System.Random();
         int randomNumber = r.Next(0, 101);
-
-        Debug.Log($"Inimigo com {dropChance}% de taxa rodou {randomNumber}. Vai dropar? {randomNumber < dropChance}.");
 
         return randomNumber < dropChance;
     }
