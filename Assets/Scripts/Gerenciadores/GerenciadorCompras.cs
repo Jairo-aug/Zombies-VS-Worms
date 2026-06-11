@@ -17,6 +17,7 @@ public class GerenciadorCompras : MonoBehaviour
     public Vector3 origemDoGrid;
     public float tamanhoQuadradinho;
 
+    private bool relocatingTower = false;
     private bool torreSelecionada = false; // Controle se uma torre já foi comprada
     private GameObject torreAtual; // Torre atualmente selecionada
     private bool[] torresCompradas; // Array para rastrear se cada torre foi comprada
@@ -157,25 +158,31 @@ public class GerenciadorCompras : MonoBehaviour
         }
     }
 
-    private void Update()
-    {
-        if (torreSelecionada && cursorTorre.activeSelf)
-        {
-            Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            cursorTorre.transform.position = new Vector3(mousePosition.x, mousePosition.y, 0);
+    private void Update() {
+        if (torreSelecionada && cursorTorre.activeSelf) {
+            DragTowerOnMap();
+        }
 
-            UpdateMouseSprite(cursorTorre.transform.position, torreAtual);
+        AtualizarUI();
+    }
+    
+    private void DragTowerOnMap() {
+        Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        cursorTorre.transform.position = new Vector3(mousePosition.x, mousePosition.y, 0);
 
-            if (Input.GetMouseButtonDown(0))
-            {
-                if (PodeColocarTorre(cursorTorre.transform.position, torreAtual))
-                {
+        UpdateMouseSprite(cursorTorre.transform.position, torreAtual);
+
+        if (Input.GetMouseButtonDown(0)) {
+            if (PodeColocarTorre(cursorTorre.transform.position, torreAtual)) {
+                if (relocatingTower) {
+                    RelocateTower(cursorTorre.transform.position, torreAtual);
+                }
+
+                else {
                     ColocarTorreNoMapa(cursorTorre.transform.position);
                 }
             }
         }
-
-        AtualizarUI();
     }
 
     private void ColocarTorreNoMapa(Vector3 positionToSpawn)
@@ -192,8 +199,10 @@ public class GerenciadorCompras : MonoBehaviour
         posicoesTorres.Add(new Vector2Int(x, y),temp);
         somColocartorre.Play();
         
-        Zombie torre = torreAtual.GetComponent<Zombie>();
+        Zombie torre = temp.GetComponent<Zombie>();
         torre.OnTorreMorreu += UpdateListaTorres;
+
+        SubscribeToTowerEvents(torre);
 
         // Desativa as imagens de indicação
         imagemIndicacaoZumbi.SetActive(false);
@@ -202,6 +211,86 @@ public class GerenciadorCompras : MonoBehaviour
         // Reseta o cursor
         cursorTorre.SetActive(false);
         torreSelecionada = false;
+    }
+
+    private void SubscribeToTowerEvents(Zombie z) {
+        if (z.TryGetComponent<TheTower>(out var theTower)) {
+            theTower.Relocate += () => {
+                relocatingTower = true;
+                torreSelecionada = true;
+                torreAtual = theTower.gameObject;
+
+                // Ativa a imagem de indicação apropriada
+                if (torreAtual.TryGetComponent(out Construcao tipoConstrucao))
+                {
+                    // Desativa todas as imagens primeiro
+                    imagemIndicacaoZumbi.SetActive(false);
+                    imagemIndicacaoArmadilha.SetActive(false);
+
+                    // Ativa a imagem correspondente
+                    if (tipoConstrucao.tipo == TipoConstrucao.Torre)
+                    {
+                        imagemIndicacaoZumbi.SetActive(true);
+                    }
+                    else if (tipoConstrucao.tipo == TipoConstrucao.Armadilha)
+                    {
+                        imagemIndicacaoArmadilha.SetActive(true);
+                    }
+                }
+
+                // Configura o cursor
+                torreSprite = torreAtual.GetComponentInChildren<SpriteRenderer>().sprite;
+                if (torreSprite != null)
+                {
+                    cursorRenderer.sprite = torreSprite;
+                    cursorTorre.SetActive(true);
+                    cursorTorre.transform.localScale = new Vector3(0.5f, 0.5f, 0);
+                }
+            };
+        }
+    }
+
+    public void RelocateTower(Vector3 positionToSpawn, GameObject tower) {
+        Debug.Log("Entrou em relocatetower");
+        int x, y;
+        GetXZ(positionToSpawn, out x, out y);
+
+        if ((x == 6 && y == 6) || (x == 6 && y == 7) || (x == 7 && y == 6) || (x == 7 && y == 7))
+        {
+            return;
+        }
+
+        Vector2Int newPos = new(x, y);
+        Vector3 newWorldPos = GetWorldPosition(x, y);
+
+        Vector2Int oldPos = default;
+        bool found = false;
+
+        foreach (var entry in posicoesTorres){
+            if (entry.Value == torreAtual) {
+                oldPos = entry.Key;
+                found = true;
+                break;
+            }
+        }
+
+        if (found) {
+            posicoesTorres.Remove(oldPos);
+            posicoesTorres[newPos] = torreAtual;
+
+            torreAtual.transform.position = newWorldPos;
+        }
+
+        somColocartorre.Play();
+        
+        // Desativa as imagens de indicação
+        imagemIndicacaoZumbi.SetActive(false);
+        imagemIndicacaoArmadilha.SetActive(false);
+
+        // Reseta o cursor
+        cursorTorre.SetActive(false);
+        torreSelecionada = false;
+        relocatingTower = false;
     }
 
     private void UpdateMouseSprite(Vector3 position, GameObject construcao)

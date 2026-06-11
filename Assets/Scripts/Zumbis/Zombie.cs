@@ -2,7 +2,7 @@ using UnityEngine;
 using System;
 using System.Collections;
 
-public class Zombie : MonoBehaviour, IDamageable, IHealable {
+public class Zombie : MonoBehaviour, IClickable, IDamageable, IHealable {
     public ZombieData attributes;
 
     protected float actionCooldownTimer;
@@ -51,8 +51,8 @@ public class Zombie : MonoBehaviour, IDamageable, IHealable {
         fleshStack = fleshStackObject.GetComponent<FleshStack>();
     }
 
+    public virtual void OnClicked() { }
     protected virtual void Update() { }
-
     protected virtual void Attack() { }
     protected virtual void Attack(GameObject target) { }
 

@@ -18,11 +18,10 @@ public class InteractionSystem : MonoBehaviour {
         if (Input.GetMouseButton(0) && hoveredObject != null) {
             if (hoveredObject.TryGetComponent<Item>(out var item)) {
                 item.targetInventory = inventory;
-                item.OnClicked();
             }
 
-            if (hoveredObject.TryGetComponent<FleshDrop>(out var flesh)) {
-                flesh.OnClicked();
+            if (hoveredObject.TryGetComponent<IClickable>(out var clickable)){
+                clickable.OnClicked();
             }
         }
     }
