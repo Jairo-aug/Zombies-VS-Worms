@@ -5,9 +5,6 @@ using UnityEngine.UI;
 public class Enemy : MonoBehaviour, IDamageable {
     protected Transform target; // O alvo a ser perseguido (a Pilha de Carne)
     protected float currentSpeed;
-    public bool isParalyzed { get; protected set; } = false;
-    protected float paralyzationTime = 3f;
-    protected float paralyzationTimer;
     public Rigidbody2D enemyRb;
 
     // ATRIBUTOS
@@ -72,18 +69,8 @@ public class Enemy : MonoBehaviour, IDamageable {
             // Calcula a direção para o alvo
             Vector2 direction = (target.position - transform.position).normalized;
 
-            if (!isParalyzed) {
-                // Move o inimigo na direção do alvo
-                transform.position = Vector2.MoveTowards(transform.position, target.position, currentSpeed * Time.deltaTime);
-            }
-
-            else {
-                paralyzationTimer -= Time.deltaTime;
-
-                if (paralyzationTimer <= 0) {
-                    Unparalyze();
-                }
-            }
+            // Move o inimigo na direção do alvo
+            transform.position = Vector2.MoveTowards(transform.position, target.position, currentSpeed * Time.deltaTime);
         }
 
         // Aplica dano contínuo enquanto estiver tocando a Pilha de Carne
@@ -166,7 +153,7 @@ public class Enemy : MonoBehaviour, IDamageable {
         }
     }
 
-    protected IEnumerator Disappear() {
+    protected IEnumerator SumirEDestruir() {
         if (spriteRenderer != null) {
             Color originalColor = spriteRenderer.color;
             float elapsedTime = 0f;
@@ -182,30 +169,12 @@ public class Enemy : MonoBehaviour, IDamageable {
         Destroy(gameObject);
     }
 
-    public void Knockback(Vector2 repelDirection, float repelStrength) {
-        if (isParalyzed) return;
-
-        Debug.Log($"Kinematic: {enemyRb.isKinematic}");
-        
-        Paralyze();
-
-        enemyRb.AddForce(repelDirection * repelStrength, ForceMode2D.Impulse);
-    }
-
-    protected void Paralyze() {
-        isParalyzed = true;
-
-        paralyzationTimer = paralyzationTime;
-    }
-
-    protected void Unparalyze() => isParalyzed = false;
-
     protected void Die() {
         // Gerar experiência e pontos
         ExperienceManager.Instance.AddExperience(expAmount);
         pileOfFlesh.ModifyPointQuantity(expAmount);
 
-        StartCoroutine(Disappear());
+        StartCoroutine(SumirEDestruir());
 
         if (WillDropAnItem()) {
             DropItem();
