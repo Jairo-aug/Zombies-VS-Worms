@@ -18,8 +18,18 @@ public class FlyingLarva : Larva {
             // Calcula a direção para o alvo (desnecessário)
             Vector2 direction = (target.position - transform.position).normalized;
 
-            // Move o inimigo na direção do alvo
-            transform.position = Vector2.MoveTowards(transform.position, target.position, currentSpeed * Time.deltaTime);
+            if (!isParalyzed) {
+                // Move o inimigo na direção do alvo
+                transform.position = Vector2.MoveTowards(transform.position, target.position, currentSpeed * Time.deltaTime);
+            }
+
+            else {
+                paralyzationTimer -= Time.deltaTime;
+
+                if (paralyzationTimer <= 0) {
+                    Unparalyze();
+                }
+            }
         }
 
         if (isTouchingPileOfFlesh && pileOfFlesh != null) {

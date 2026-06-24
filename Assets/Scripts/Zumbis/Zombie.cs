@@ -189,4 +189,10 @@ public class Zombie : MonoBehaviour, IClickable, IDamageable, IHealable {
 
         return closestEnemy;
     }
+
+    protected bool ShouldReactToEnemy(Transform enemyPosition) {
+        float distance = Vector3.Distance(enemyPosition.position, transform.position);
+        
+        return distance <= attributes.reactionRange;
+    }
 }
