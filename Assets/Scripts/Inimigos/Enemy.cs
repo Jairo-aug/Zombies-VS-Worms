@@ -3,9 +3,10 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class Enemy : MonoBehaviour, IDamageable {
-    protected Transform target; // O alvo a ser perseguido (a Pilha de Carne)
+    public Transform target; // O alvo a ser perseguido (a Pilha de Carne)
     protected float currentSpeed;
     public Rigidbody2D enemyRb;
+    protected Vector2 direction;
 
     // ATRIBUTOS
     // Pode ser substituido por um scriptable object.
@@ -22,8 +23,8 @@ public class Enemy : MonoBehaviour, IDamageable {
     [SerializeField] protected Sprite placeholderItemDrop;
 
     
-    protected FleshStack pileOfFlesh; // Referência à Pilha de Carne
-    protected bool isTouchingPileOfFlesh = false; // Verifica se está tocando a Pilha de Carne
+    protected FleshStack fleshStack; // Referência à Pilha de Carne
+    protected bool isTouchingfleshStack = false; // Verifica se está tocando a Pilha de Carne
     protected Collider2D isTouchingTower; // Verifica se está tocando a Pilha de Carne
     protected float timeSinceLastHit; // Tempo desde a última aplicação de dano
 
@@ -64,21 +65,16 @@ public class Enemy : MonoBehaviour, IDamageable {
     protected virtual void Update() {
         timeSinceLastHit += Time.deltaTime; // Atualiza o tempo desde o último dano
 
-        // Verifica se o alvo foi definido
-        if (target != null) {
-            // Calcula a direção para o alvo
-            Vector2 direction = (target.position - transform.position).normalized;
+        direction = (target.position - transform.position).normalized;
 
-            // Move o inimigo na direção do alvo
-            transform.position = Vector2.MoveTowards(transform.position, target.position, currentSpeed * Time.deltaTime);
-        }
+        transform.position = Vector2.MoveTowards(transform.position, target.position, currentSpeed * Time.deltaTime);
 
         // Aplica dano contínuo enquanto estiver tocando a Pilha de Carne
-        if (isTouchingPileOfFlesh && pileOfFlesh != null) {
+        if (isTouchingfleshStack && fleshStack != null) {
             
             if (timeSinceLastHit >= attackInterval) {
                 // Usar evento para dar dano à pilha.
-                pileOfFlesh.TakeDamage(attackDamage); // Aplica dano à vida da Pilha de Carne
+                fleshStack.TakeDamage(attackDamage); // Aplica dano à vida da Pilha de Carne
 
                 timeSinceLastHit = 0f; // Reseta o tempo
             }
@@ -90,27 +86,31 @@ public class Enemy : MonoBehaviour, IDamageable {
                 timeSinceLastHit = 0f; // Reseta o tempo
             }
         }
-
     }
 
     protected virtual void OnTriggerEnter2D(Collider2D collider) {
-        
+        // Pode ser verificado existência de componente Zombie ao invés.
         if (collider.CompareTag("PilhaDeCarne")) {
-            isTouchingPileOfFlesh = true; 
+            isTouchingfleshStack = true; 
             currentSpeed = 0;    
             enemyRb.isKinematic = true;
         }
 
+        // Pode ser verificado existência de componente Zombie ao invés.
         else if (collider.CompareTag("Player")) {
             isTouchingTower = collider;
             currentSpeed = 0;    
             enemyRb.isKinematic = true;
         }
+
+        else if (collider.gameObject.transform.parent.TryGetComponent(out MagnetWizard magnetWizard)) {
+            target = magnetWizard.gameObject.transform;
+        }
     }
 
     protected virtual void OnTriggerExit2D(Collider2D collider) {
         if (collider.CompareTag("PilhaDeCarne")) {
-            isTouchingPileOfFlesh = false; // Marca que não está mais tocando a Pilha de Carne
+            isTouchingfleshStack = false; // Marca que não está mais tocando a Pilha de Carne
         }
 
         else if (collider.CompareTag("Player")) {
@@ -118,6 +118,10 @@ public class Enemy : MonoBehaviour, IDamageable {
             TargetIsFleshStack();
             currentSpeed = maximumSpeed;    
             enemyRb.isKinematic = false;
+        }
+
+        else if (collider.gameObject.transform.parent.TryGetComponent(out MagnetWizard magnetWizard)) {
+            target = fleshStack.transform;
         }
     }
 
@@ -172,7 +176,7 @@ public class Enemy : MonoBehaviour, IDamageable {
     protected void Die() {
         // Gerar experiência e pontos
         ExperienceManager.Instance.AddExperience(expAmount);
-        pileOfFlesh.ModifyPointQuantity(expAmount);
+        fleshStack.ModifyPointQuantity(expAmount);
 
         StartCoroutine(SumirEDestruir());
 
@@ -189,11 +193,11 @@ public class Enemy : MonoBehaviour, IDamageable {
     }
 
     protected virtual void TargetIsFleshStack() {
-        GameObject pileOfFleshObject = GameObject.FindGameObjectWithTag("PilhaDeCarne");
+        GameObject fleshStackObject = GameObject.FindGameObjectWithTag("PilhaDeCarne");
         
         
-        target = pileOfFleshObject.transform;
-        pileOfFlesh = pileOfFleshObject.GetComponent<FleshStack>();
+        target = fleshStackObject.transform;
+        fleshStack = fleshStackObject.GetComponent<FleshStack>();
     }
 
     public void levelUp() {
