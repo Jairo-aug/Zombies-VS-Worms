@@ -33,7 +33,9 @@ public class Zombie : MonoBehaviour, IClickable, IDamageable, IHealable {
     protected SpriteRenderer spriteRenderer;
     protected FleshStack fleshStack;
 
-    protected virtual void Start() {
+    protected virtual void Start() => Initialize();
+
+    protected void Initialize() {
         animator = GetComponent<Animator>();
         
         upgradeSFX = GetComponent<AudioSource>();

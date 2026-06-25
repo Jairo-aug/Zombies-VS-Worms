@@ -6,21 +6,7 @@ public class Regenecro : Zombie {
     private List<IHealable> nearbyHealables;
 
     protected override void Start() {
-        animator = GetComponent<Animator>();
-        
-        upgradeSFX = GetComponent<AudioSource>();
-        deathSFX = GetComponent<AudioSource>();
-
-        healthBar = GetComponentInChildren<SliderBar>();
-        currentHealth = attributes.maxHealth;
-        healthBar.Set(attributes.maxHealth, currentHealth);
-        timeUntilUpgrade = upgradeTime;
-
-        spriteRenderer = GetComponentInChildren<SpriteRenderer>();
-        spriteRenderer.sprite = normalSprite;
-
-        GameObject fleshStackObject = GameObject.FindGameObjectWithTag("PilhaDeCarne");
-        fleshStack = fleshStackObject.GetComponent<FleshStack>();
+        base.Initialize();
 
         nearbyHealables = new();
     }

@@ -19591,7 +19591,7 @@ MonoBehaviour:
   - {fileID: 1763476711536496672, guid: 58cba62008f7e4644bdeff5b8c8a0377, type: 3}
   - {fileID: 8696051709581079776, guid: d4d9d5e2305133546b97af4429d7e1f2, type: 3}
   - {fileID: 3066876880802074741, guid: 27a31dfa120c66144a3d196840d084a8, type: 3}
-  - {fileID: 3728245304575517196, guid: 2611a260409db1846913ee1ae203cc9e, type: 3}
+  - {fileID: 3728245304575517196, guid: 625640d82029c1c45ac4f39c1ac7f31c, type: 3}
   cursorTorre: {fileID: 1355918466}
   imagemIndicacaoZumbi: {fileID: 1584519520}
   imagemIndicacaoArmadilha: {fileID: 1186814122}
