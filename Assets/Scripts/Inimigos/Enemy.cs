@@ -208,7 +208,7 @@ public class Enemy : MonoBehaviour, IDamageable {
 
         StartCoroutine(SumirEDestruir());
 
-        if (WillDropAnItem()) {
+        if (RNG.RollChance100(dropChance)) {
             DropItem();
         }
     }
@@ -231,12 +231,5 @@ public class Enemy : MonoBehaviour, IDamageable {
     public void levelUp() {
         maximumHealth += 25f;
         attackDamage += 4f;
-    }
-
-    protected bool WillDropAnItem() {
-        System.Random r = new System.Random();
-        int randomNumber = r.Next(0, 101);
-
-        return randomNumber < dropChance;
     }
 }
