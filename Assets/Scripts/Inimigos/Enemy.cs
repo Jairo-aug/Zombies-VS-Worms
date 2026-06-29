@@ -8,6 +8,8 @@ public class Enemy : MonoBehaviour, IDamageable {
     public Rigidbody2D enemyRb;
     protected Vector2 direction;
 
+    protected bool isHypnotized;
+
     // ATRIBUTOS
     // Pode ser substituido por um scriptable object.
     protected virtual float maximumSpeed { get; set; }
@@ -67,7 +69,17 @@ public class Enemy : MonoBehaviour, IDamageable {
 
         direction = (target.position - transform.position).normalized;
 
-        transform.position = Vector2.MoveTowards(transform.position, target.position, currentSpeed * Time.deltaTime);
+        if ((isTouchingTower || isTouchingfleshStack) && !isHypnotized) {
+            currentSpeed = 0;
+        } else {
+            currentSpeed = maximumSpeed;
+        }
+
+        if (isHypnotized) {
+            enemyRb.linearVelocity = -(direction * currentSpeed);
+        } else {
+            enemyRb.linearVelocity = direction * currentSpeed;
+        }
 
         // Aplica dano contínuo enquanto estiver tocando a Pilha de Carne
         if (isTouchingfleshStack && fleshStack != null) {
@@ -103,8 +115,10 @@ public class Enemy : MonoBehaviour, IDamageable {
             enemyRb.isKinematic = true;
         }
 
-        else if (collider.gameObject.transform.parent.TryGetComponent(out MagnetWizard magnetWizard)) {
-            target = magnetWizard.gameObject.transform;
+        else if (collider.gameObject.transform.parent) {
+            if (collider.gameObject.transform.parent.TryGetComponent(out MagnetWizard magnetWizard)) {
+                target = magnetWizard.gameObject.transform;
+            }
         }
     }
 
@@ -120,9 +134,23 @@ public class Enemy : MonoBehaviour, IDamageable {
             enemyRb.isKinematic = false;
         }
 
-        else if (collider.gameObject.transform.parent.TryGetComponent(out MagnetWizard magnetWizard)) {
-            target = fleshStack.transform;
+        else if (collider.gameObject.transform.parent) {
+            if (collider.gameObject.transform.parent.TryGetComponent(out MagnetWizard magnetWizard)) {
+                target = magnetWizard.gameObject.transform;
+            }
         }
+    }
+
+    public IEnumerator GetHypnotized(float hypnotizationSeconds) {
+        isHypnotized = true;
+        currentSpeed /= 2;
+        spriteRenderer.flipX = true;
+
+        yield return new WaitForSeconds(hypnotizationSeconds);
+
+        isHypnotized = false;
+        currentSpeed *= 2;
+        spriteRenderer.flipX = false;
     }
 
     protected virtual void Attack(GameObject target) {

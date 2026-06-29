@@ -13,12 +13,9 @@ public class FlyingLarva : Larva {
     protected override void Update() {
         timeSinceLastHit += Time.deltaTime;
         
-        // Calcula a direção para o alvo (desnecessário)
         direction = (target.position - transform.position).normalized;
 
-        // Move o inimigo na direção do alvo
-        transform.position = Vector2.MoveTowards(transform.position, target.position, currentSpeed * Time.deltaTime);
-        
+        enemyRb.linearVelocity = direction * currentSpeed;
 
         if (isTouchingfleshStack && fleshStack != null) {
             if (timeSinceLastHit >= attackInterval) {
