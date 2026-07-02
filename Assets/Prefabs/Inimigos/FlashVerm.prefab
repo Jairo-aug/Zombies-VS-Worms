@@ -606,8 +606,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60221676ef539ef42a756de3646e6f43, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FlashVerm
+  target: {fileID: 0}
   enemyRb: {fileID: 5269617513828488383}
   placeholderItemDrop: {fileID: 7293598183456022363, guid: 1ddc9afd21fec77489b1248d18f31b68, type: 3}
+  spriteRenderer: {fileID: 1614256912582869657}
 --- !u!1 &8446505559277539617
 GameObject:
   m_ObjectHideFlags: 0

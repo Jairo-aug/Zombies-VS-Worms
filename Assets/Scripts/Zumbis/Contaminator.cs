@@ -2,8 +2,9 @@ using UnityEngine;
 using System;
 
 public class Contaminator : Decompoison {
-    [SerializeField] protected float hypnotizationChance = 10f;
+    [SerializeField] protected float hypnotizationChance = 90f;
     [SerializeField] protected float hypnotizationTime = 7f;
+    [SerializeField] protected int hypnotizationDamageProcs = 7;
 
     protected void HypnotizationAttempt(Enemy enemy) {
         if (RNG.RollChance100(hypnotizationChance)) {
@@ -12,7 +13,7 @@ public class Contaminator : Decompoison {
     }
 
     protected void Hypnotize(Enemy enemy) {
-        StartCoroutine(enemy.GetHypnotized(hypnotizationTime));
+        StartCoroutine(enemy.GetHypnotized(hypnotizationTime, hypnotizationDamageProcs, 3));
     }
 
     protected void OnTriggerEnter2D(Collider2D collision) {

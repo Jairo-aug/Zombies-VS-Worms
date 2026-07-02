@@ -5419,6 +5419,9 @@ MonoBehaviour:
   attackSFX: {fileID: 7312902284270419965}
   evolutionEffect: {fileID: 6059227984608938108}
   bombEffect: {fileID: 2908695872663446634}
+  hypnotizationChance: 90
+  hypnotizationTime: 7
+  hypnotizationDamageProcs: 7
 --- !u!114 &1944603812207344480
 MonoBehaviour:
   m_ObjectHideFlags: 0

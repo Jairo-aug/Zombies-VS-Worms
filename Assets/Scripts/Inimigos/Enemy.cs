@@ -7,6 +7,7 @@ public class Enemy : MonoBehaviour, IDamageable {
     protected float currentSpeed;
     public Rigidbody2D enemyRb;
     protected Vector2 direction;
+    protected BoxCollider2D boxCollider;
 
     protected bool isHypnotized;
 
@@ -57,6 +58,9 @@ public class Enemy : MonoBehaviour, IDamageable {
         }
 
         currentSpeed = maximumSpeed;
+
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        boxCollider = GetComponent<BoxCollider2D>();
 
         // Modificações Visuais
         if (spriteRenderer != null) {
@@ -141,16 +145,25 @@ public class Enemy : MonoBehaviour, IDamageable {
         }
     }
 
-    public IEnumerator GetHypnotized(float hypnotizationSeconds) {
+    public IEnumerator GetHypnotized(float hypnotizationTime, int hits, float damage) {
         isHypnotized = true;
-        currentSpeed /= 2;
         spriteRenderer.flipX = true;
+        currentSpeed /= 2;
+        boxCollider.isTrigger = true;
 
-        yield return new WaitForSeconds(hypnotizationSeconds);
+        float timePerHit = hypnotizationTime / hits;
 
+        for (int i = 0; i < hits; i++) {
+            yield return new WaitForSeconds(timePerHit);
+            TakeDamage(damage);
+        }
+
+        yield return new WaitForSeconds(hypnotizationTime);
+        
         isHypnotized = false;
-        currentSpeed *= 2;
         spriteRenderer.flipX = false;
+        currentSpeed = maximumSpeed;
+        boxCollider.isTrigger = false;
     }
 
     protected virtual void Attack(GameObject target) {
