@@ -16,7 +16,7 @@ public class Contaminator : Decompoison {
         StartCoroutine(enemy.GetHypnotized(hypnotizationTime, hypnotizationDamageProcs, 3));
     }
 
-    protected void OnTriggerEnter2D(Collider2D collision) {
+    protected override void OnTriggerEnter2D(Collider2D collision) {
         if (collision.gameObject.TryGetComponent(out Enemy enemy)) {
             HypnotizationAttempt(enemy);
         }

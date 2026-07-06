@@ -8,8 +8,7 @@ public class Enemy : MonoBehaviour, IDamageable {
     public Rigidbody2D enemyRb;
     protected Vector2 direction;
     protected BoxCollider2D boxCollider;
-
-    protected bool isHypnotized;
+    protected EnemyState currentState;
 
     // ATRIBUTOS
     // Pode ser substituido por um scriptable object.
@@ -66,24 +65,12 @@ public class Enemy : MonoBehaviour, IDamageable {
         if (spriteRenderer != null) {
             originalColor = spriteRenderer.color; // Armazena a cor original
         }
+
+        SetState(EnemyState.Aggroing);
     }
 
     protected virtual void Update() {
         timeSinceLastHit += Time.deltaTime; // Atualiza o tempo desde o último dano
-
-        direction = (target.position - transform.position).normalized;
-
-        if ((isTouchingTower || isTouchingfleshStack) && !isHypnotized) {
-            currentSpeed = 0;
-        } else {
-            currentSpeed = maximumSpeed;
-        }
-
-        if (isHypnotized) {
-            enemyRb.linearVelocity = -(direction * currentSpeed);
-        } else {
-            enemyRb.linearVelocity = direction * currentSpeed;
-        }
 
         // Aplica dano contínuo enquanto estiver tocando a Pilha de Carne
         if (isTouchingfleshStack && fleshStack != null) {
@@ -104,27 +91,25 @@ public class Enemy : MonoBehaviour, IDamageable {
         }
     }
 
-    protected virtual void OnTriggerEnter2D(Collider2D collider) {
-        // Pode ser verificado existência de componente Zombie ao invés.
-        if (collider.CompareTag("PilhaDeCarne")) {
-            isTouchingfleshStack = true; 
-            currentSpeed = 0;    
-            enemyRb.isKinematic = true;
+    protected virtual void FixedUpdate() {
+        direction = (target.position - transform.position).normalized;
+        
+        if (currentState == EnemyState.Hypnotized) {
+            enemyRb.linearVelocity = -(direction * currentSpeed);
         }
-
-        // Pode ser verificado existência de componente Zombie ao invés.
-        else if (collider.CompareTag("Player")) {
-            isTouchingTower = collider;
-            currentSpeed = 0;    
-            enemyRb.isKinematic = true;
-        }
-
-        else if (collider.gameObject.transform.parent) {
-            if (collider.gameObject.transform.parent.TryGetComponent(out MagnetWizard magnetWizard)) {
-                target = magnetWizard.gameObject.transform;
+        
+        else if (currentState == EnemyState.Aggroing) {
+            if (isTouchingTower || isTouchingfleshStack) {
+                currentSpeed = 0;
+            } else {
+                currentSpeed = maximumSpeed;
             }
+
+            enemyRb.linearVelocity = direction * currentSpeed;
         }
     }
+
+    protected void SetState(EnemyState state) => currentState = state;
 
     protected virtual void OnTriggerExit2D(Collider2D collider) {
         if (collider.CompareTag("PilhaDeCarne")) {
@@ -146,7 +131,7 @@ public class Enemy : MonoBehaviour, IDamageable {
     }
 
     public IEnumerator GetHypnotized(float hypnotizationTime, int hits, float damage) {
-        isHypnotized = true;
+        SetState(EnemyState.Hypnotized);
         spriteRenderer.flipX = true;
         currentSpeed /= 2;
         boxCollider.isTrigger = true;
@@ -160,10 +145,23 @@ public class Enemy : MonoBehaviour, IDamageable {
 
         yield return new WaitForSeconds(hypnotizationTime);
         
-        isHypnotized = false;
+        SetState(EnemyState.Aggroing);
         spriteRenderer.flipX = false;
         currentSpeed = maximumSpeed;
         boxCollider.isTrigger = false;
+    }
+
+    public IEnumerator GetRepelled(Vector2 repelDirection, float repelStrength, float paralizationLength) {
+        SetState(EnemyState.Knockedback);
+        GetComponent<Animator>().enabled = false;
+
+        enemyRb.linearVelocity = Vector2.zero;
+        enemyRb.AddForce(repelDirection * repelStrength, ForceMode2D.Impulse);
+
+        yield return new WaitForSeconds(paralizationLength);
+        
+        SetState(EnemyState.Aggroing);
+        GetComponent<Animator>().enabled = true;
     }
 
     protected virtual void Attack(GameObject target) {
@@ -244,5 +242,33 @@ public class Enemy : MonoBehaviour, IDamageable {
     public void levelUp() {
         maximumHealth += 25f;
         attackDamage += 4f;
+    }
+
+    protected virtual void OnTriggerEnter2D(Collider2D collider) {
+        // Pode ser verificado existência de componente Zombie ao invés.
+        if (collider.CompareTag("PilhaDeCarne")) {
+            isTouchingfleshStack = true; 
+            currentSpeed = 0;    
+            enemyRb.isKinematic = true;
+        }
+
+        // Pode ser verificado existência de componente Zombie ao invés.
+        else if (collider.CompareTag("Player")) {
+            isTouchingTower = collider;
+            currentSpeed = 0;    
+            enemyRb.isKinematic = true;
+        }
+
+        else if (collider.gameObject.transform.parent) {
+            if (collider.gameObject.transform.parent.TryGetComponent(out MagnetWizard magnetWizard)) {
+                target = magnetWizard.gameObject.transform;
+            }
+        }
+    }
+
+    protected enum EnemyState {
+        Aggroing,
+        Hypnotized,
+        Knockedback
     }
 }

@@ -191,4 +191,8 @@ public class Zombie : MonoBehaviour, IClickable, IDamageable, IHealable {
 
         return closestEnemy;
     }
+
+    protected virtual void OnTriggerEnter2D(Collider2D collision) {
+        
+    }
 }
