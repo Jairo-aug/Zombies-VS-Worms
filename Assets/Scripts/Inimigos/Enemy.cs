@@ -154,6 +154,7 @@ public class Enemy : MonoBehaviour, IDamageable {
     public IEnumerator GetRepelled(Vector2 repelDirection, float repelStrength, float paralizationLength) {
         SetState(EnemyState.Knockedback);
         GetComponent<Animator>().enabled = false;
+        boxCollider.isTrigger = true;
 
         enemyRb.linearVelocity = Vector2.zero;
         enemyRb.AddForce(repelDirection * repelStrength, ForceMode2D.Impulse);
@@ -162,6 +163,7 @@ public class Enemy : MonoBehaviour, IDamageable {
         
         SetState(EnemyState.Aggroing);
         GetComponent<Animator>().enabled = true;
+        boxCollider.isTrigger = false;
     }
 
     protected virtual void Attack(GameObject target) {
