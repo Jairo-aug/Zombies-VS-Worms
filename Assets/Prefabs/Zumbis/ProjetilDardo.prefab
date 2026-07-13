@@ -9,8 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1355527391592724893}
-  - component: {fileID: 6074330612124155867}
   - component: {fileID: 4878602130850083312}
+  - component: {fileID: 4757606570199193351}
   - component: {fileID: 8945530494207997771}
   - component: {fileID: 4546082401889574930}
   m_Layer: 0
@@ -30,27 +30,11 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -3.247, y: 1.266, z: -0.24729961}
-  m_LocalScale: {x: 0.08175773, y: 0.08175773, z: 0.08175773}
+  m_LocalScale: {x: 0.026836975, y: 0.026836975, z: 0.026836975}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6074330612124155867
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5039625977786442169}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62368f4ce4f89ce4dbe85e31612d9352, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 7
-  damage: 25
-  rotateSpeed: 100
-  rotationDirection: {x: 0, y: 0, z: 15}
 --- !u!212 &4878602130850083312
 SpriteRenderer:
   serializedVersion: 2
@@ -110,6 +94,20 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!114 &4757606570199193351
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5039625977786442169}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d334c51c2852624889b2f976c8dee11, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Dart
+  speed: 8
+  damage: 35
 --- !u!61 &8945530494207997771
 BoxCollider2D:
   m_ObjectHideFlags: 0

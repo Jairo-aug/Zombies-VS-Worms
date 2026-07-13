@@ -192,6 +192,8 @@ public class Zombie : MonoBehaviour, IClickable, IDamageable, IHealable {
         return closestEnemy;
     }
 
+    protected Vector2 GetFacingDirection() => (fleshStack.transform.position - transform.position).normalized;
+
     protected virtual void OnTriggerEnter2D(Collider2D collision) {
         
     }

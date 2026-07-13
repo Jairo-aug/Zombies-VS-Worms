@@ -18,8 +18,6 @@ public class ShovelKnight : Zomboxer {
 
         StartCoroutine(enemyComponent.GetRepelled(randomRepelDirection, repelStrength, paralizationLength));
     }
-
-    private Vector2 GetFacingDirection() => (fleshStack.transform.position - transform.position).normalized;
     
     private Vector2 GetRandomDirection() {
         Vector2 facingDirection = GetFacingDirection();

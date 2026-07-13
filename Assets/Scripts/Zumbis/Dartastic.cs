@@ -7,11 +7,11 @@ public class Dartastic : Vertebrawler {
 
     protected override void Attack(GameObject target) {
         GameObject projectile = Instantiate(projectilePrefab, transform.position, Quaternion.identity);
-        Projetil projScript = projectile.GetComponent<Projetil>();
+        Dart dart = projectile.GetComponent<Dart>();
         
-        if (projScript != null) projScript.SetTarget(target);
+        if (dart != null) dart.SetDirection(-GetFacingDirection());
         
-        if(isUpgrade == true) projScript.UpgradeStatus();       
+        if(isUpgrade == true) dart.UpgradeStatus();       
 
         // Ignorar a colisão entre o projétil e o inimigo para evitar interação física
         Collider2D enemyCollider = target.GetComponent<Collider2D>();

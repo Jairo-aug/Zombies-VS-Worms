@@ -23,11 +23,11 @@ public class Vertebrawler : Zombie {
 
     protected override void Attack(GameObject target) {
         GameObject projectile = Instantiate(projectilePrefab, transform.position, Quaternion.identity);
-        Projetil projScript = projectile.GetComponent<Projetil>();
+        Bone bone = projectile.GetComponent<Bone>();
         
-        projScript.SetTarget(target);
+        bone.SetTarget(target);
         
-        if (isUpgrade == true) projScript.UpgradeStatus();       
+        if (isUpgrade == true) bone.UpgradeStatus();       
 
         // Ignorar a colisão entre o projétil e o inimigo para evitar interação física
         Collider2D enemyCollider = target.GetComponent<Collider2D>();
