@@ -2,7 +2,7 @@
 %TAG !u! tag:unity3d.com,2011:
 --- !u!78 &1
 TagManager:
-  serializedVersion: 2
+  serializedVersion: 3
   tags:
   - Enemy
   - PilhaDeCarne
@@ -47,3 +47,21 @@ TagManager:
   - name: "Part\xEDculas"
     uniqueID: 1801079685
     locked: 0
+  - name: Enemy
+    uniqueID: 3971873155
+    locked: 0
+  - name: Zombie
+    uniqueID: 1417532771
+    locked: 0
+  - name: FlyingEnemy
+    uniqueID: 4099114711
+    locked: 0
+  - name: Drops
+    uniqueID: 462615329
+    locked: 0
+  - name: UI
+    uniqueID: 1282787399
+    locked: 0
+  m_RenderingLayers:
+  - Default
+  m_MigratedRenderPipelines: []

@@ -5244,8 +5244,8 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 1417532771
+  m_SortingLayer: 3
   m_SortingOrder: 8
   m_MaskInteraction: 0
   m_Sprite: {fileID: 1579187182, guid: a20384c5b2d35bb469207d6f2d27fe6f, type: 3}
@@ -5379,6 +5379,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attributes: {fileID: 11400000, guid: de3baeed6d5407549a916e56f661e857, type: 2}
   normalSprite: {fileID: 1579187182, guid: a20384c5b2d35bb469207d6f2d27fe6f, type: 3}
+  fleshificationDropSprite: {fileID: 0}
   upgradedZombie: {fileID: -4689406079702324653, guid: 1ddc9afd21fec77489b1248d18f31b68, type: 3}
   upgradeSFX: {fileID: 0}
   deathSFX: {fileID: 1357346674580832557, guid: d2f25a79d2d69fe4fb5fc4876edbf185, type: 3}

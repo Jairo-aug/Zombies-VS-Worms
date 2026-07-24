@@ -16,7 +16,7 @@ public class ArmadilhaCasulo : MonoBehaviour
     public int custo = 50; // Custo da Armadilha Casulo
     [SerializeField] AudioSource somMorte;
     private SpriteRenderer spriteRenderer;
-    private PilhaDeCarne pilhaDeCarne;
+    private FleshStack fleshStack;
 
     void Start()
     {
@@ -24,8 +24,8 @@ public class ArmadilhaCasulo : MonoBehaviour
         currentTime = maxDuration;
 
         // Referências
-        GameObject pilhaDeCarneObject = GameObject.FindGameObjectWithTag("PilhaDeCarne");
-        pilhaDeCarne = pilhaDeCarneObject?.GetComponent<PilhaDeCarne>();
+        GameObject fleshStackObject = GameObject.FindGameObjectWithTag("fleshStack");
+        fleshStack = fleshStackObject?.GetComponent<FleshStack>();
 
         timeBar = GetComponentInChildren<SliderBar>();
         if (timeBar != null)
@@ -58,9 +58,9 @@ public class ArmadilhaCasulo : MonoBehaviour
     void Die()
     {
         // Gera 100 pontos na Pilha de Carne ao morrer
-        if (pilhaDeCarne != null)
+        if (fleshStack != null)
         {
-            pilhaDeCarne.GerarPontos(100);
+            fleshStack.ModifyPointQuantity(100);
         }
         somMorte.Play();
         StartCoroutine(SumirEDestruir());
@@ -80,13 +80,13 @@ public class ArmadilhaCasulo : MonoBehaviour
         int pontosRecuperados = Mathf.FloorToInt(custo / 2.0f);
 
         // Recupera os pontos na Pilha de Carne
-        if (pilhaDeCarne != null)
+        if (fleshStack != null)
         {
-            pilhaDeCarne.GerarPontos(pontosRecuperados);
+            fleshStack.ModifyPointQuantity(pontosRecuperados);
         }
         else
         {
-            Debug.LogWarning("PilhaDeCarne não foi atribuída. Pontos não foram recuperados.");
+            Debug.LogWarning("fleshStack não foi atribuída. Pontos não foram recuperados.");
         }
 
         // Inicia o fade-out antes de destruir o objeto

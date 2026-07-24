@@ -9,16 +9,16 @@ public class GameManager : MonoBehaviour
     public Text pontosText; // Referência ao campo de texto para exibir pontos
     public Font minhaFonte; // Fonte personalizada para o texto
 
-    private PilhaDeCarne pilhaDeCarne; // Referência ao script que gerencia os pontos
+    private FleshStack fleshStack; // Referência ao script que gerencia os pontos
 
     void Start()
     {
-        // Obtém a referência ao script PilhaDeCarne
-        pilhaDeCarne = FindObjectOfType<PilhaDeCarne>();
+        // Obtém a referência ao script fleshStack
+        fleshStack = FindObjectOfType<FleshStack>();
 
-        if (pilhaDeCarne == null)
+        if (fleshStack == null)
         {
-            Debug.LogError("PilhaDeCarne não encontrada na cena.");
+            Debug.LogError("fleshStack não encontrada na cena.");
         }
 
         // Configura a fonte personalizada no campo de texto
@@ -37,9 +37,9 @@ public class GameManager : MonoBehaviour
             int custo = GetTorreCusto(torre);
 
             // Verifica se o jogador tem pontos suficientes
-            if (pilhaDeCarne.pontosPodres < custo)
+            if (fleshStack.rottenPoints < custo)
             {
-                Debug.Log("PontosPodres insuficientes para comprar esta torre!");
+                Debug.Log("rottenPoints insuficientes para comprar esta torre!");
                 return;
             }
 
@@ -64,7 +64,7 @@ public class GameManager : MonoBehaviour
             }
 
             // Deduz os pontos do jogador
-            pilhaDeCarne.pontosPodres -= custo;
+            fleshStack.rottenPoints -= custo;
             AtualizarUI(); // Atualiza a UI após deduzir os pontos
         }
         else
@@ -95,7 +95,7 @@ public class GameManager : MonoBehaviour
     {
         if (pontosText != null)
         {
-            pontosText.text = "Pontos: " + pilhaDeCarne.pontosPodres;
+            pontosText.text = "Pontos: " + fleshStack.rottenPoints;
         }
     }
 }

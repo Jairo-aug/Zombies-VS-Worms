@@ -15,6 +15,6 @@ MonoBehaviour:
   zombieName: Vertebrawler
   zombieCost: 150
   range: 4.4
-  attackCooldown: 2
+  actionTime: 2
   damage: 10
   maxHealth: 50

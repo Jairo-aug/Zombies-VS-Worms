@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ZombieData
   zombieName: Zomboxer
   zombieCost: 100
-  range: 0.5
-  attackCooldown: 2
-  damage: 20
-  maxHealth: 50
+  range: 1
+  actionTime: 0.5
+  damage: 30
+  maxHealth: 80

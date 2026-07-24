@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class ItemInteractionSystem : MonoBehaviour {
+public class InteractionSystem : MonoBehaviour {
     public Camera cam;
     public Inventory inventory;
 
@@ -17,7 +17,11 @@ public class ItemInteractionSystem : MonoBehaviour {
         
         if (Input.GetMouseButton(0) && hoveredObject != null) {
             if (hoveredObject.TryGetComponent<Item>(out var item)) {
-                item.OnClicked(inventory);
+                item.targetInventory = inventory;
+            }
+
+            if (hoveredObject.TryGetComponent<IClickable>(out var clickable)){
+                clickable.OnClicked();
             }
         }
     }

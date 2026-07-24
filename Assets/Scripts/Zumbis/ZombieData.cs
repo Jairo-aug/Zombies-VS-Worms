@@ -3,9 +3,11 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "ZombieData", menuName = "Scriptable Objects/ZombieData")]
 public class ZombieData : ScriptableObject {
     public string zombieName;
-    public float zombieCost;
+    public int zombieCost;
     public float range;
-    public float attackCooldown;
+    public float actionTime;
     public float damage;
     public float maxHealth;
+    public float healAmount;
+    public int fleshificationAmount;
 }
